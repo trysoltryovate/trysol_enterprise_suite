@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  body {
+    @apply font-poppins h-full w-full overflow-x-hidden;
+  }
+
+  /* Scrollbar Track (Background) */
+  *::-webkit-scrollbar {
+    background-color: rgb(47, 46, 46);
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Scrollbar Thumb (Draggable part) */
+  *::-webkit-scrollbar-thumb {
+    background-color: #5f6061;
+    border-radius: 10px;
+  }
+
+  /* Scrollbar Thumb on Hover */
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #3e4348;
+  }
+
+  /* Scrollbar Track (Invisible background) */
+  *::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  /* Scrollbar Corner (if applicable) */
+  *::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+}
