@@ -11,6 +11,7 @@ export const routes = createBrowserRouter([
     path: "/",
     element: LazyLoad(LoginPage),
   },
+  
   {
     path: "/home",
     element: LazyLoad(HomePage),
