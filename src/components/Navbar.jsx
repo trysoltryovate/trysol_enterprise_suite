@@ -11,7 +11,7 @@ function Navbar() {
           className="h-[25px] w-[50px] cursor-pointer md:h-[30px] md:w-[80px]"
         />
         <button className="mr-4 rounded-full bg-blue-500 px-6 py-2 text-sm text-white hover:bg-blue-600">
-          Login
+          Sign Up
         </button>
       </div>
     </div>

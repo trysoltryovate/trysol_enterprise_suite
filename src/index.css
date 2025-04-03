@@ -10,7 +10,7 @@ html {
 
 @layer base {
   body {
-    @apply font-poppins h-full w-full overflow-x-hidden;
+    @apply h-full w-full overflow-x-hidden font-poppins;
   }
 
   /* Scrollbar Track (Background) */
