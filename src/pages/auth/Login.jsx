@@ -82,14 +82,14 @@ export default function Login() {
       <div className="max-w-10xl flex w-full flex-col items-center justify-center gap-[60px] lg:flex-row">
         {/* Left Section - About */}
         <div className="w-full justify-center lg:w-1/2 lg:text-left">
-          <p className="text-lg font-medium leading-relaxed text-gray-800">
+          <p className="text-sm font-medium leading-relaxed text-gray-800 md:text-lg">
             Leading software company Trysol Global Services has 13+ years of
             experience delivering CMM Level 3 and ISO-certified IT solutions in
             Hyderabad. Specializing in custom software, enterprise solutions,
             cybersecurity, cloud & DevOps, and AI-driven analytics, Trysol
             transforms business challenges into seamless operations.
           </p>
-          <p className="mt-4 text-lg font-medium leading-relaxed text-gray-800">
+          <p className="mt-4 text-sm font-medium leading-relaxed text-gray-800 md:text-lg">
             Trusted by Fortune 500 companies and startups alike, Trysol is
             committed to innovation, quality, and customer success, building
             long-term industry relationships.
@@ -213,10 +213,13 @@ export default function Login() {
             <button className="mt-2 w-full rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-600">
               Login
             </button>
-            <p className="mt-1 text-sm font-medium opacity-80">
+            <p className="opacity-120 mt-1 text-[15px] font-semibold">
               Don't have an Account, please
-              <span className="text-blue-500 underline">
-                <button className="ml-1" onClick={ToggleForm}>
+              <span className="text-[#004B91]">
+                <button
+                  className="ml-1 font-bold underline"
+                  onClick={ToggleForm}
+                >
                   Sign Up
                 </button>
               </span>
