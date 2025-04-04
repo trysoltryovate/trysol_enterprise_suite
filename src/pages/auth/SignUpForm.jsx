@@ -292,10 +292,10 @@ export default function SignUpForm() {
       <button className="mt-2 w-full rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-600">
         Sign Up
       </button>
-      <p className="mt-1 text-sm font-medium opacity-80">
+      <p className="opacity-120 mt-1 text-[15px] font-semibold">
         Already have an account?
-        <span className="ml-1 text-blue-500 underline hover:text-blue-700">
-          <button>Login</button>
+        <span className="text-[#004B91]">
+          <button className="ml-1 font-bold underline">Login</button>
         </span>
       </p>
     </form>
