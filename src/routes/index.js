@@ -1,4 +1,3 @@
-
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -6,6 +5,7 @@ import LazyLoad from "../components/LazyLoader";
 
 const LoginPage = lazy(() => import("../pages/auth/Login"));
 const HomePage = lazy(() => import("../pages/Home"));
+const ForgotPassword = lazy(() => import("../pages/auth/ForgotPassword"));
 const CandidateTable = lazy(() => import("../components/Table")); // Import the CandidateTable component
 const AddCandidate = lazy(() => import("../components/AddCandidate"));
 
@@ -14,7 +14,7 @@ export const routes = createBrowserRouter([
     path: "/",
     element: LazyLoad(LoginPage),
   },
-  
+
   {
     path: "/home",
     element: LazyLoad(HomePage),
@@ -27,5 +27,8 @@ export const routes = createBrowserRouter([
     path: "/candidates/add",
     element: LazyLoad(AddCandidate),
   },
-
+  {
+    path: "/forgot-password",
+    element: LazyLoad(ForgotPassword),
+  },
 ]);
