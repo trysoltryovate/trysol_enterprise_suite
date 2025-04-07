@@ -9,6 +9,9 @@ import ISONUMBER from "../../assets/iso2700.png";
 import Navbar from "../../components/Navbar";
 import SignUpForm from "./SignUpForm";
 import axios from "axios";
+import { FaUser } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
+import { FaUnlock } from "react-icons/fa6";
 
 export default function Login() {
   const [loginId, setLoginId] = useState("");
@@ -35,7 +38,7 @@ export default function Login() {
         ? e.target.value.length < 4
           ? `At least 4 characters needed`
           : "Login ID is correct."
-        : "Login ID is required!"
+        : "Login ID is required!",
     );
   };
 
@@ -89,9 +92,13 @@ export default function Login() {
     const data = { username: loginId, password: password };
 
     try {
-      const response = await axios.post("http://192.168.0.224:8082/login", data, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await axios.post(
+        "http://192.168.0.224:8082/login",
+        data,
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
 
       console.log("Response:", response);
 
@@ -111,14 +118,14 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-gray-200 to-indigo-500 p-4">
+    <div className="flex min-h-screen flex-col bg-amber-600 bg-gradient-to-b from-gray-200 to-indigo-500">
       {/* Header */}
       <Navbar />
 
       {/* Main Content */}
-      <div className="max-w-10xl flex w-full flex-col items-center justify-center gap-[60px] lg:flex-row">
+      <div className="max-w-16xl flex w-full flex-col items-center justify-center gap-[60px] lg:flex-row">
         {/* Left Section - About */}
-        <div className="w-full justify-center lg:w -1/2 lg:text-left">
+        <div className="lg:w -1/2 w-[680px] justify-center lg:text-left">
           <p className="text-sm font-medium leading-relaxed text-gray-800 md:text-lg">
             Leading software company Trysol Global Services has 13+ years of
             experience delivering CMM Level 3 and ISO-certified IT solutions in
@@ -134,19 +141,19 @@ export default function Login() {
 
           <div
             id="certificates"
-            className="mt-16 flex min-h-[20%] items-center justify-evenly rounded-2xl bg-[#bbbde4] py-[35px] md:min-h-[30%]"
+            className="mt-8 flex min-h-[20%] items-center justify-evenly rounded-2xl bg-[#bbbde4] bg-white bg-opacity-40 py-[30px] shadow-lg md:min-h-[30%]"
           >
             <img
               src={ISO}
-              className="h-[80px] w-[80px] rounded-xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
+              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
             />
             <img
               src={CMMI}
-              className="h-[80px] w-[80px] rounded-xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
+              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
             />
             <img
               src={ISONUMBER}
-              className="h-[80px] w-[80px] rounded-xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
+              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
             />
           </div>
         </div>
@@ -155,8 +162,11 @@ export default function Login() {
         {isSignUp ? (
           <SignUpForm />
         ) : (
-          <form onSubmit={handleLogin} className="mt-6 min-h-[74vh] content-center rounded-lg bg-white bg-opacity-40 p-8 shadow-md lg:mt-0 lg:w-1/3">
-            <h2 className="mb-4 text-center text-xl font-semibold text-gray-900">
+          <form
+            onSubmit={handleLogin}
+            className="lg:w-1/3.5 mb-6 min-h-[74vh] content-center rounded-3xl rounded-lg bg-white bg-opacity-80 p-8 shadow-md shadow-gray-800 lg:mt-0"
+          >
+            <h2 className="mb-8 text-center text-xl font-bold text-gray-900">
               Login
             </h2>
             {/* Login ID */}
@@ -167,20 +177,25 @@ export default function Login() {
               >
                 Login ID
               </label>
-              <input
-                id="loginId"
-                value={loginId}
-                onChange={(e) => validateLoginId(e)}
-                type="text"
-                placeholder="Enter user ID"
-                className={`border ${
-                  loginId.length < 4
-                    ? "border-gray-400"
-                    : loginIdError.includes("correct") && !isLoginFailed
-                      ? "border-green-500 focus-visible:ring-green-100"
-                      : "border-red-500 focus-visible:ring-red-100"
-                } bg-background ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm`}
-              />
+              <div className="relative">
+                {loginId.trim() === "" && (
+                  <FaUser className="pointer-events-none absolute left-2 top-3.5 text-gray-500" />
+                )}
+                <input
+                  id="loginId"
+                  value={loginId}
+                  onChange={(e) => validateLoginId(e)}
+                  type="text"
+                  placeholder="Enter user ID"
+                  className={`border-0 border-b-2 pl-8 ${
+                    loginId.length < 4
+                      ? "border-gray-400"
+                      : loginIdError.includes("correct") && !isLoginFailed
+                        ? "border-green-500 focus-visible:ring-green-100"
+                        : "border-red-500 focus-visible:ring-red-100"
+                  } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm`}
+                />
+              </div>
               {!isLoginFailed && (
                 <p
                   className={`inline-flex items-center gap-x-1 text-[12px] font-semibold ${
@@ -205,50 +220,76 @@ export default function Login() {
                 Password
               </label>
               <div className="relative">
-                <input
-                  type={isPassVisible ? "text" : "password"}
-                  id="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    const validation = validatePassword(e.target.value);
-                    setPasswordError(validation.message);
-                    setIsError(validation.isError);
-                    setIsSuccess(validation.isSuccess);
-                  }}
-                  className={`border ${
-                    password.length === 0
-                      ? "border-gray-400"
-                      : isSuccess && !isLoginFailed
-                        ? "border-green-500 focus-visible:ring-green- 100"
-                        : "border-red-500 focus-visible:ring-red-100"
-                  } bg-background ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm`}
-                  placeholder="Enter password"
-                />
-                <button
-                  type="button"
-                  className="absolute right-2 top-2 rounded-md border border-transparent px-2 py-1 text-gray-400 outline-1 hover:cursor-pointer hover:border-gray-100 hover:bg-gray-100 hover:text-gray-700"
-                  onClick={() => setIsPassVisible(!isPassVisible)}
-                >
-                  {isPassVisible ? <IoMdEyeOff /> : <IoEye />}
-                </button>
+                <div className="relative">
+                  {password.trim() === "" ? (
+                    <FaLock className="pointer-events-none absolute left-2 top-3.5 text-gray-500" />
+                  ) : isSuccess ? (
+                    <FaUnlock className="pointer-events-none absolute left-2 top-3.5 text-gray-600" />
+                  ) : (
+                    <FaLock className="pointer-events-none absolute left-2 top-3.5 text-red-500" />
+                  )}
+
+                  <input
+                    type={isPassVisible ? "text" : "password"}
+                    id="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      const validation = validatePassword(e.target.value);
+                      setPasswordError(validation.message);
+                      setIsError(validation.isError);
+                      setIsSuccess(validation.isSuccess);
+                    }}
+                    className={`border-0 border-b-2 pl-8 ${
+                      password.length === 0
+                        ? "border-gray-400"
+                        : isSuccess && !isLoginFailed
+                          ? "focus-visible:ring-green- 100 border-green-500"
+                          : "border-red-500 focus-visible:ring-red-100"
+                    } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm`}
+                    placeholder="Enter password"
+                  />
+                  <div className="text-right">
+                    <Link
+                      to="/forgot-password"
+                      className="text-sm font-semibold text-blue-700 hover:underline"
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
+                  <button
+                    type="button"
+                    className="absolute right-2 top-2 rounded-md border border-transparent px-2 py-1 text-gray-400 outline-1 hover:cursor-pointer hover:border-gray-100 hover:bg-gray-100 hover:text-gray-700"
+                    onClick={() => setIsPassVisible(!isPassVisible)}
+                  >
+                    {isPassVisible ? <IoMdEyeOff /> : <IoEye />}
+                  </button>
+                </div>
+                {!isLoginFailed && (
+                  <p
+                    className={`inline-flex items-center gap-x-1 text-[12px] font-semibold ${
+                      isSuccess ? "text-green-600" : "text-red-500"
+                    } ${passwordError ? "opacity-100" : "opacity-0"} `}
+                  >
+                    {isSuccess ? <FaCircleCheck /> : <IoMdInformationCircle />}{" "}
+                    {passwordError}
+                  </p>
+                )}
               </div>
-              {!isLoginFailed && (
-                <p
-                  className={`inline-flex items-center gap-x-1 text-[12px] font-semibold ${
-                    isSuccess ? "text-green-600" : "text-red-500"
-                  } ${passwordError ? "opacity-100" : "opacity-0"} `}
-                >
-                  {isSuccess ? <FaCircleCheck /> : <IoMdInformationCircle />}{" "}
-                  {passwordError}
-                </p>
-              )}
             </div>
-            {isLoginFailed && <p className="mt-2 text-sm text-red-500">Invalid credentials, please try again.</p>}
-            <button type="submit" className="mt-2 w-full rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-600">
+
+            {isLoginFailed && (
+              <p className="mt-2 text-sm text-red-500">
+                Invalid credentials, please try again.
+              </p>
+            )}
+            <button
+              type="submit"
+              className="w-full rounded-2xl bg-blue-500 py-1 text-white hover:bg-blue-600"
+            >
               {isLoading ? "Loading..." : "Login"}
             </button>
-            <p className="opacity-120 mt-1 text-[15px] font-semibold">
+            <p className="opacity-120 font-sm mt-1 text-[15px]">
               Don't have an Account, please
               <span className="text-[#004B91]">
                 <button
