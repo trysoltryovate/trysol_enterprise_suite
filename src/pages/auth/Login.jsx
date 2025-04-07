@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/imports */
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
