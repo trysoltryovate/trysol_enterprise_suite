@@ -28,11 +28,12 @@ const CandidateTable = () => {
     setLoadingDeleteId(id);
     await new Promise((resolve) => setTimeout(resolve, 400));
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this candidate?");
+    const confirmDelete = window.confirm("Are you sure you want to delete this candidate?",
+    );
     if (confirmDelete) {
       try {
         await axios.delete(`${API_BASE_URL}/delete/${id}`);
-        setCandidates(candidates.filter(candidate => candidate.id !== id));
+        setCandidates(candidates.filter((candidate) => candidate.id !== id));
       } catch (error) {
         console.error("Error deleting candidate:", error);
       }
@@ -42,28 +43,66 @@ const CandidateTable = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="rounded-lg bg-white p-6 shadow-md">
         <p className="mb-4 flex items-center rounded-md bg-blue-100 p-3 text-gray-600">
           <FiInfo className="mr-2" />
           The candidates directory lists all candidates in the organization.
         </p>
 
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-gray-800">Candidates List</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Candidates List
+          </h2>
 
-          <Link className="bg-green-500 text-white px-4 py-2 rounded flex items-center" to="/candidates/add"> <FiUser className="mr-2" />Add Candidate</Link>
-          
+          <Link
+            className="flex items-center rounded bg-green-500 px-2 py-2 text-white"
+            to="/candidates/add"
+          >
+            {/* <FiUser className="mr-2" /> */}
+            <button
+              className="group cursor-pointer outline-none duration-300 hover:rotate-180 mr-2"
+              title="Add candidate"
+            >
+              <svg
+                class="stroke-teal-400 fill-none group-hover:fill-white group-active:stroke-teal-200 group-active:fill-teal-500 group-active:duration-0 duration-300"
+                viewBox="0 0 24 24"
+                height="30px"
+                width="30px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-width="1.5"
+                  d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                ></path>
+                <path stroke-width="1.5" d="M8 12H16"></path>
+                <path stroke-width="1.5" d="M12 16V8"></path>
+              </svg>
+            </button>
+            Add Candidate
+          </Link>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full bg-white border border-gray-300 rounded-lg shadow-md">
+          <table className="w-full rounded-lg border border-gray-300 bg-white shadow-md">
             <thead className="bg-gray-200">
               <tr>
                 {[
-                  "Name", "Technology", "Experience", "Email", "Phone",
-                  "Skill Set", "Start Date", "End Date", "Client Name", "Project Duration", "Edit", "Delete"
+                  "Name",
+                  "Technology",
+                  "Experience",
+                  "Email",
+                  "Phone",
+                  "Skill Set",
+                  "Start Date",
+                  "End Date",
+                  "Client Name",
+                  "Project Duration",
+                  "Edit",
+                  "Delete",
                 ].map((heading, index) => (
-                  <th key={index} className="px-4 py-2 text-left border">{heading}</th>
+                  <th key={index} className="border px-4 py-2 text-left">
+                    {heading}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -82,7 +121,7 @@ const CandidateTable = () => {
                   <td className="px-4 py-2">{candidate.projectDuration}</td>
                   <td className="px-4 py-2">
                     <button className="text-yellow-500 hover:text-yellow-700">
-                      <FiEdit className="w-5 h-5" />
+                      <FiEdit className="h-5 w-5" />
                     </button>
                   </td>
                   <td className="px-4 py-2">
@@ -92,9 +131,9 @@ const CandidateTable = () => {
                       disabled={loadingDeleteId === candidate.id}
                     >
                       {loadingDeleteId === candidate.id ? (
-                        <ImSpinner2 className="w-5 h-5 animate-spin" />
+                        <ImSpinner2 className="h-5 w-5 animate-spin" />
                       ) : (
-                        <FiTrash className="w-5 h-5" />
+                        <FiTrash className="h-5 w-5" />
                       )}
                     </button>
                   </td>
@@ -103,7 +142,6 @@ const CandidateTable = () => {
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
   );

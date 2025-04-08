@@ -21,7 +21,7 @@ export const routes = createBrowserRouter([
   },
   {
     path: "/candidates",
-    element: LazyLoad(CandidateTable), // Add the CandidateTable component to the /candidates route
+    element: LazyLoad(CandidateTable),
   },
   {
     path: "/candidates/add",
