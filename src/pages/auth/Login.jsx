@@ -126,7 +126,7 @@ export default function Login() {
       {/* Main Content */}
       <div className="max-w-16xl flex w-full flex-col items-center justify-center gap-[60px] lg:flex-row">
         {/* Left Section - About */}
-        <div className="lg:w -1/2 w-[680px] justify-center lg:text-left">
+        <div className="lg:w -1/2 w-[800px] justify-center lg:text-left">
           <p className="text-sm font-medium leading-relaxed text-gray-800 md:text-lg">
             Leading software company Trysol Global Services has 13+ years of
             experience delivering CMM Level 3 and ISO-certified IT solutions in
@@ -142,19 +142,19 @@ export default function Login() {
 
           <div
             id="certificates"
-            className="mt-8 flex min-h-[20%] items-center justify-evenly rounded-2xl bg-[#bbbde4] bg-white bg-opacity-40 py-[30px] shadow-lg md:min-h-[30%]"
+            className="mt-20 flex min-h-[20%] items-center justify-evenly rounded-2xl bg-[#bbbde4] bg-white bg-opacity-40 py-[35px] shadow-lg md:min-h-[30%]"
           >
             <img
               src={ISO}
-              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
+              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[170px] xl:w-[170px]"
             />
             <img
               src={CMMI}
-              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
+              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[170px] xl:w-[170px]"
             />
             <img
               src={ISONUMBER}
-              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[150px] xl:w-[150px]"
+              className="h-[80px] w-[80px] rounded-xl shadow-md shadow-gray-800 transition duration-300 hover:scale-110 hover:shadow-2xl md:h-[100px] md:w-[100px] xl:h-[170px] xl:w-[170px]"
             />
           </div>
         </div>
@@ -165,13 +165,13 @@ export default function Login() {
         ) : (
           <form
             onSubmit={handleLogin}
-            className="lg:w-1/3.5 mb-6 min-h-[74vh] content-center rounded-3xl rounded-lg bg-white bg-opacity-80 p-8 shadow-md shadow-gray-800 lg:mt-0"
+            className="lg:w-1/3.5 min-h-[74vh] content-center rounded-3xl rounded-lg bg-white bg-opacity-80 p-10 shadow-md shadow-gray-800 lg:mt-0"
           >
-            <h2 className="mb-8 text-center text-xl font-bold text-gray-900">
+            <h2 className="text-center text-xl font-bold text-gray-900">
               Login
             </h2>
             {/* Login ID */}
-            <div className="mb-3 flex flex-col gap-y-1">
+            <div className="flex flex-col gap-y-1">
               <label
                 htmlFor="loginId"
                 className="ml-1 w-max text-sm font-semibold opacity-80"
@@ -213,7 +213,7 @@ export default function Login() {
               )}
             </div>
             {/* Password */}
-            <div className="mb-3 flex flex-col gap-y-1">
+            <div className="flex flex-col gap-y-1">
               <label
                 htmlFor="password"
                 className="ml-1 w-max text-sm font-semibold opacity-80"

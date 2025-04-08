@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/imports */
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -5,12 +6,12 @@ import { appsList } from "../utils/lists";
 import Navbar from "../components/Navbar";
 
 const Appcard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const handleClick = () => {
-    // Navigate to the candidates table
-    navigate("/candidates");
-  };
+  // const handleClick = () => {
+  //   // Navigate to the candidates table
+  //   navigate("/candidates");
+  // };
 
   return (
     <>
@@ -41,11 +42,42 @@ const Appcard = () => {
                   {data.description}
                 </p>
                 {/* Button to navigate to the candidates table */}
-                <button
+                {/* <button
                   className="group-hover:text-primary mt-3 rounded-full px-4 py-1 text-black opacity-0 transition-opacity duration-300 ease-in-out group-hover:bg-white group-hover:opacity-100"
                   onClick={handleClick}
                 >
                   Get Started
+                </button> */}
+                <button
+                  className="group relative h-14 w-14 overflow-hidden border-0 bg-transparent outline-none"
+                  
+                  onClick={()=>navigate(data.page||data.page)}
+                >
+                  {/* Outer ring */}
+                  <span className="absolute inset-[7px] rounded-full border-4 border-[#f0eeef] transition-all duration-[500ms] ease-[cubic-bezier(0.455,0.03,0.515,0.955)] group-hover:scale-[0.7] group-hover:opacity-0 group-focus:scale-[0.7] group-focus:opacity-0"></span>
+
+                  {/* Hover ring */}
+                  <span className="absolute inset-[7px] scale-[1.3] rounded-full border-4 border-[#96daf0] opacity-0 transition-all delay-[80ms] duration-[500ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-100 group-hover:opacity-100 group-focus:scale-100 group-focus:opacity-100"></span>
+
+                  {/* Icon container */}
+                  <div className="absolute left-0 top-0 flex transition-transform duration-500 ease-in-out group-hover:-translate-x-14 group-focus:-translate-x-14">
+                    {/* First Arrow */}
+                    <span className="mx-[18px] mt-[17px] block h-5 w-5 rotate-180 fill-[#f0eeef]">
+                      <svg
+                        viewBox="0 0 46 40"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9z" />
+                      </svg>
+                    </span>
+
+                    {/* Second Arrow */}
+                    <span className="mx-[18px] mt-[17px] block h-5 w-5 rotate-180 fill-[#f0eeef]">
+                      <svg viewBox="0 0 46 40">
+                        <path d="M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9z" />
+                      </svg>
+                    </span>
+                  </div>
                 </button>
               </div>
             </div>
@@ -57,4 +89,3 @@ const Appcard = () => {
 };
 
 export default Appcard;
-
