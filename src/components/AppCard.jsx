@@ -41,17 +41,10 @@ const Appcard = () => {
                 <p className="line-clamp-2 text-sm text-gray-500 group-hover:text-white">
                   {data.description}
                 </p>
-                {/* Button to navigate to the candidates table */}
-                {/* <button
-                  className="group-hover:text-primary mt-3 rounded-full px-4 py-1 text-black opacity-0 transition-opacity duration-300 ease-in-out group-hover:bg-white group-hover:opacity-100"
-                  onClick={handleClick}
-                >
-                  Get Started
-                </button> */}
+
                 <button
                   className="group relative h-14 w-14 overflow-hidden border-0 bg-transparent outline-none"
-                  
-                  onClick={()=>navigate(data.page||data.page)}
+                  onClick={() => navigate(data.page || data.page)}
                 >
                   {/* Outer ring */}
                   <span className="absolute inset-[7px] rounded-full border-4 border-[#f0eeef] transition-all duration-[500ms] ease-[cubic-bezier(0.455,0.03,0.515,0.955)] group-hover:scale-[0.7] group-hover:opacity-0 group-focus:scale-[0.7] group-focus:opacity-0"></span>
