@@ -165,7 +165,8 @@ export default function Login() {
         ) : (
           <form
             onSubmit={handleLogin}
-            className="lg:w-1/3.5 min-h-[74vh] content-center rounded-3xl rounded-lg bg-white bg-opacity-80 p-10 shadow-md shadow-gray-800 lg:mt-0"
+            className="lg:w-1/3.5 min-h-[74vh] content-center rounded-3xl rounded-lg
+             bg-white bg-opacity-80 p-10 shadow-md shadow-gray-800 lg:mt-0"
           >
             <h2 className="text-center text-xl font-bold text-gray-900">
               Login
