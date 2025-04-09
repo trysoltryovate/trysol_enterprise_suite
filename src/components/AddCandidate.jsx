@@ -104,14 +104,13 @@ function AddCandidate() {
 
         {/* Submit Button */}
         <div className="col-span-2 mt-4 flex justify-end">
-
-
           <button
             type="submit"
-            className="relative inline-block rounded-md bg-blue-500 text-white text-[17px] px-4 py-2 w-[180px] transition-all duration-500 cursor-pointer overflow-hidden group">
-            <span className="inline-block relative transition-all duration-500 pr-0 group-hover:pr-4">
+            className="group relative inline-block w-[180px] cursor-pointer overflow-hidden rounded-md bg-blue-500 px-4 py-2 text-[17px] text-white transition-all duration-500"
+          >
+            <span className="relative inline-block pr-0 transition-all duration-500 group-hover:pr-4">
               Add Candidate
-              <span className="absolute opacity-0 right-[-15px] top-0 transition-all duration-500 group-hover:opacity-100 group-hover:right-0">
+              <span className="absolute right-[-15px] top-0 opacity-0 transition-all duration-500 group-hover:right-0 group-hover:opacity-100">
                 »
               </span>
             </span>
