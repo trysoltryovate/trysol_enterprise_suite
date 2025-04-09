@@ -5,7 +5,7 @@ export const appsList = [
     image:
       "https://indoreinstitute.com/wp-content/uploads/2019/10/140975-OSX7O9-940.jpg",
     path: "/",
-    description: "This is a brief description for PIP",
+    description: "This is a brief description for IRR",
     buttonText: "Go to PIP Page",
     page:"/candidates"
   },

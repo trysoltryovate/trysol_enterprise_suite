@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/imports */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -67,7 +68,7 @@ const EditCandidate = () => {
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
         {/* Text Fields */}
         {[
-          // { label: "S.No", name: "sNo" },
+          { label: "S.No", name: "sNo" },
           { label: "Mode", name: "mode" },
           { label: "Name", name: "name" },
           { label: "Skill", name: "skill" },
@@ -90,6 +91,7 @@ const EditCandidate = () => {
               {label}
             </label>
             <input
+            disabled={name=="sNo"?true:false}
               type={type}
               id={name}
               name={name}
