@@ -4,23 +4,24 @@ import axios from "axios";
 import { FiEdit, FiTrash, FiInfo, FiUser } from "react-icons/fi";
 import { ImSpinner2 } from "react-icons/im";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const API_BASE_URL = "http://192.168.0.224:8082";
 
 const CandidateTable = () => {
   const [candidates, setCandidates] = useState([]);
   const [loadingDeleteId, setLoadingDeleteId] = useState(null);
-
+  const navigate = useNavigate();
+  const fetchCandidates = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/getAll`);
+      setCandidates(response.data);
+    } catch (error) {
+      console.error("Error fetching candidates:", error);
+    }
+  };
   useEffect(() => {
-    const fetchCandidates = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/getAll`);
-        setCandidates(response.data);
-      } catch (error) {
-        console.error("Error fetching candidates:", error);
-      }
-    };
-
     fetchCandidates();
   }, []);
 
@@ -28,18 +29,24 @@ const CandidateTable = () => {
     setLoadingDeleteId(id);
     await new Promise((resolve) => setTimeout(resolve, 400));
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this candidate?",
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this candidate?",
     );
     if (confirmDelete) {
       try {
         await axios.delete(`${API_BASE_URL}/delete/${id}`);
         setCandidates(candidates.filter((candidate) => candidate.id !== id));
+        fetchCandidates();
       } catch (error) {
         console.error("Error deleting candidate:", error);
       }
     }
     setLoadingDeleteId(null);
   };
+  const handleEditClick = (candidate) => {
+    navigate(`/candidates/edit/${candidate.sNo}`);
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -60,11 +67,11 @@ const CandidateTable = () => {
           >
             {/* <FiUser className="mr-2" /> */}
             <button
-              className="group cursor-pointer outline-none duration-300 hover:rotate-180 mr-2"
+              className="group mr-2 cursor-pointer outline-none duration-300 hover:rotate-180"
               title="Add candidate"
             >
               <svg
-                class="stroke-teal-400 fill-none group-hover:fill-white group-active:stroke-teal-200 group-active:fill-teal-500 group-active:duration-0 duration-300"
+                class="fill-none stroke-teal-400 duration-300 group-hover:fill-white group-active:fill-teal-500 group-active:stroke-teal-200 group-active:duration-0"
                 viewBox="0 0 24 24"
                 height="30px"
                 width="30px"
@@ -87,16 +94,23 @@ const CandidateTable = () => {
             <thead className="bg-gray-200">
               <tr>
                 {[
+                  "S.No",
+                  "Mode",
                   "Name",
-                  "Technology",
+                  "Skill",
+                  "projects/Shadow",
                   "Experience",
+                  "NDA",
+                  "CV Ready",
+                  "LinkedIn",
+                  "Date Of NDA",
+                  "Notary",
+                  "Affidavit",
+                  "salary On Deployed",
+                  "salary On Bench",
+                  "Ready To Travel",
                   "Email",
-                  "Phone",
-                  "Skill Set",
-                  "Start Date",
-                  "End Date",
-                  "Client Name",
-                  "Project Duration",
+                  "Mobile Num",
                   "Edit",
                   "Delete",
                 ].map((heading, index) => (
@@ -109,28 +123,38 @@ const CandidateTable = () => {
             <tbody>
               {candidates.map((candidate) => (
                 <tr key={candidate.id} className="border">
+                  <td className="px-4 py-2">{candidate.sNo}</td>
+                  <td className="px-4 py-2">{candidate.mode}</td>
                   <td className="px-4 py-2">{candidate.name}</td>
-                  <td className="px-4 py-2">{candidate.technology}</td>
+                  <td className="px-4 py-2">{candidate.skill}</td>
+                  <td className="px-4 py-2">{candidate.projectsShadow}</td>
                   <td className="px-4 py-2">{candidate.experience}</td>
+                  <td className="px-4 py-2">{candidate.nda}</td>
+                  <td className="px-4 py-2">{candidate.cvReady}</td>
+                  <td className="px-4 py-2">{candidate.linkedin}</td>
+                  <td className="px-4 py-2">{candidate.dateOfNDA}</td>
+                  <td className="px-4 py-2">{candidate.notary}</td>
+                  <td className="px-4 py-2">{candidate.affidavit}</td>
+                  <td className="px-4 py-2">{candidate.salaryOnDeployed}</td>
+                  <td className="px-4 py-2">{candidate.salaryOnBench}</td>
+                  <td className="px-4 py-2">{candidate.readyToTravel}</td>
                   <td className="px-4 py-2">{candidate.email}</td>
-                  <td className="px-4 py-2">{candidate.phone}</td>
-                  <td className="px-4 py-2">{candidate.skillSet}</td>
-                  <td className="px-4 py-2">{candidate.startDate}</td>
-                  <td className="px-4 py-2">{candidate.endDate}</td>
-                  <td className="px-4 py-2">{candidate.clientName}</td>
-                  <td className="px-4 py-2">{candidate.projectDuration}</td>
+                  <td className="px-4 py-2">{candidate.mobileNum}</td>
                   <td className="px-4 py-2">
-                    <button className="text-yellow-500 hover:text-yellow-700">
+                    <button
+                      className="text-yellow-500 hover:text-yellow-700"
+                      onClick={() => handleEditClick(candidate)}
+                    >
                       <FiEdit className="h-5 w-5" />
                     </button>
                   </td>
                   <td className="px-4 py-2">
                     <button
                       className="text-red-500 hover:text-red-700 disabled:opacity-50"
-                      onClick={() => handleDelete(candidate.id)}
-                      disabled={loadingDeleteId === candidate.id}
+                      onClick={() => handleDelete(candidate.sNo)}
+                      disabled={loadingDeleteId === candidate.sNo}
                     >
-                      {loadingDeleteId === candidate.id ? (
+                      {loadingDeleteId === candidate.sNo ? (
                         <ImSpinner2 className="h-5 w-5 animate-spin" />
                       ) : (
                         <FiTrash className="h-5 w-5" />
