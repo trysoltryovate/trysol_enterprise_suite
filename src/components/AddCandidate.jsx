@@ -1,4 +1,4 @@
-/* eslint-disable simple-import-sort/imports */
+
 import React, { useState } from "react";
 import axios from "axios";
 import { FiInfo } from "react-icons/fi";
@@ -8,7 +8,6 @@ const API_BASE_URL = "http://192.168.0.225:8082";
 
 function AddCandidate() {
   const [formData, setFormData] = useState({
-    // sNo: "",
     mode: "",
     name: "",
     skill: "",
@@ -16,7 +15,7 @@ function AddCandidate() {
     experience: "",
     nda: "",
     cvReady: "",
-    linkedin: "", // Ensure this matches the state
+    linkedin: "",
     dateOfNDA: "",
     notary: "",
     affidavit: "",
@@ -24,32 +23,55 @@ function AddCandidate() {
     salaryOnBench: "",
     readyToTravel: "",
     email: "",
-    mobile: "", // Changed from mobileNum to phone to match the input name
+    mobileNum: "",
   });
 
+  const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+
+    // Clear error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[name];
+        return updated;
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData); // Debugging line
+
+    const newErrors = {};
+    Object.entries(formData).forEach(([key, value]) => {
+      if (typeof value === "string" && value.trim() === "") {
+        newErrors[key] = "This field is required";
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setValidationErrors(newErrors);
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${API_BASE_URL}/employee-save`,
-        formData,
+        formData
       );
-      console.log("Response:", response.data); // Log the response for debugging
-      navigate("/candidates"); // redirect to candidate list
+      console.log("Response:", response.data);
+      navigate("/candidates");
     } catch (error) {
       console.error(
         "Error adding candidate:",
-        error.response ? error.response.data : error.message,
+        error.response ? error.response.data : error.message
       );
     }
   };
@@ -61,13 +83,13 @@ function AddCandidate() {
         Use this form to add a new candidate to the organization.
       </p>
       <h2 className="mb-4 text-xl font-semibold">Add New Candidate</h2>
+
       <form
         onSubmit={handleSubmit}
+        noValidate
         className="grid grid-cols-2 gap-4 rounded-md bg-white p-4 shadow-md"
       >
-        {/* Text Fields */}
         {[
-          // { label: "S.No", name: "sNo" },
           { label: "Mode", name: "mode" },
           { label: "Name", name: "name" },
           { label: "Skill", name: "skill" },
@@ -87,7 +109,7 @@ function AddCandidate() {
         ].map(({ label, name, type = "text" }) => (
           <div className="relative" key={name}>
             <label htmlFor={name} className="text-sm text-gray-600">
-              {label}
+              {label} <span className="text-red-500">*</span>
             </label>
             <input
               type={type}
@@ -95,14 +117,21 @@ function AddCandidate() {
               name={name}
               value={formData[name]}
               onChange={handleChange}
-              required
-              className="h-12 w-full rounded-md border border-gray-300 px-3 focus:border-blue-600 focus:outline-none"
+              className={`h-12 w-full rounded-md border px-3 focus:outline-none ${
+                validationErrors[name]
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-blue-600"
+              }`}
               placeholder={label}
             />
+            {validationErrors[name] && (
+              <p className="mt-1 text-sm text-red-500">
+                {validationErrors[name]}
+              </p>
+            )}
           </div>
         ))}
 
-        {/* Submit Button */}
         <div className="col-span-2 mt-4 flex justify-end">
           <button
             type="submit"
@@ -122,15 +151,3 @@ function AddCandidate() {
 }
 
 export default AddCandidate;
-
-
-
-
-
-
-
-
-
-
-
-
