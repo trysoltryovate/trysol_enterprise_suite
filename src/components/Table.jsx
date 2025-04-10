@@ -1,7 +1,14 @@
 /* eslint-disable simple-import-sort/imports */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FiEdit, FiTrash, FiInfo, FiUser, FiDownload } from "react-icons/fi";
+import {
+  FiEdit,
+  FiTrash,
+  FiInfo,
+  FiUser,
+  FiDownload,
+  FiSearch,
+} from "react-icons/fi";
 import { ImSpinner2 } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +18,7 @@ const API_BASE_URL = "http://192.168.0.225:8082";
 const CandidateTable = () => {
   const [candidates, setCandidates] = useState([]);
   const [loadingDeleteId, setLoadingDeleteId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const fetchCandidates = async () => {
     try {
@@ -56,6 +64,34 @@ const CandidateTable = () => {
     // Trigger download using XLSX.writeFile
     XLSX.writeFile(workbook, "IRR.xlsx");
   };
+
+  const filteredCandidates = candidates.filter((candidate) => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return true;
+
+    return Object.entries(candidate).some(([key, value]) => {
+      if (!value) return false;
+      const stringValue = String(value).toLowerCase();
+
+      // Special handling for dateOfNDA
+      if (key === "dateOfNDA") {
+        const [year, month, day] = stringValue.split("-");
+        const dateWithoutDashes = stringValue.replace(/-/g, "");
+
+        return (
+          stringValue.includes(term) ||
+          dateWithoutDashes.includes(term) ||
+          year?.includes(term) ||
+          month?.includes(term) ||
+          day?.includes(term)
+        );
+      }
+
+      // General fields including sNo, experience, salary
+      return stringValue.includes(term);
+    });
+  });
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="rounded-lg bg-white p-6 shadow-md">
@@ -65,11 +101,26 @@ const CandidateTable = () => {
         </p>
 
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Candidates List
-          </h2>
+          <div className="flex gap-4">
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Candidates List
+            </h2>
 
-          
+            {/* Search Input with Icon */}
+            <div className="relative w-full md:w-80">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <FiSearch />
+              </span>
+              <input
+                type="text"
+                placeholder="Search here..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full rounded-md border border-gray-500 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+          </div>
+
           <div className="flex">
             <Link
               className="flex items-center rounded-md bg-green-500 px-2 py-2 text-white"
@@ -97,22 +148,19 @@ const CandidateTable = () => {
               Add Candidate
             </Link>
 
-
-
-<button
-      type="button"
-      className="relative w-[150px] h-12 ml-2 cursor-pointer flex items-center border bg-green-500 rounded-md overflow-hidden transition-all duration-300 group"
-      onClick={exportToExcel}
-    >
-      <span className="text-white font-semibold transform translate-x-[22px] transition-all duration-300 group-hover:text-transparent">
-      Download
-      </span>
-      <span className="absolute transform translate-x-[109px] h-full w-[39px] bg-[#17795E] flex items-center justify-center transition-all duration-300 group-hover:w-[148px] group-hover:translate-x-0 group-active:bg-[#146c54]">
-        <FiDownload className="w-5 h-5 text-white" />
-      </span>
-    </button>
-
-
+            <button
+              type="button"
+              className="group relative ml-2 flex h-12 w-[150px] cursor-pointer items-center overflow-hidden rounded-md border bg-green-500 transition-all duration-300"
+              onClick={exportToExcel}
+              title="Download"
+            >
+              <span className="translate-x-[22px] transform font-semibold text-white transition-all duration-300 group-hover:text-transparent">
+                Download
+              </span>
+              <span className="absolute flex h-full w-[39px] translate-x-[109px] transform items-center justify-center bg-[#17795E] transition-all duration-300 group-hover:w-[148px] group-hover:translate-x-0 group-active:bg-[#146c54]">
+                <FiDownload className="h-5 w-5 text-white" />
+              </span>
+            </button>
           </div>
         </div>
 
@@ -148,7 +196,7 @@ const CandidateTable = () => {
               </tr>
             </thead>
             <tbody>
-              {candidates.map((candidate, i) => (
+              {filteredCandidates.map((candidate, i) => (
                 <tr key={candidate.id} className="border">
                   <td className="px-4 py-2">{i + 1}</td>
                   <td className="px-4 py-2">{candidate.mode}</td>
@@ -190,6 +238,14 @@ const CandidateTable = () => {
                   </td>
                 </tr>
               ))}
+
+              {filteredCandidates.length === 0 && (
+                <tr>
+                  <td colSpan="19" className="p-4 text-center text-gray-500">
+                    No candidates found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
