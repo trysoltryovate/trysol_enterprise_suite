@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiInfo } from "react-icons/fi";
 
-const API_BASE_URL = "http://192.168.0.224:8082";
+const API_BASE_URL = "http://192.168.0.225:8082";
 
 const EditCandidate = () => {
   const [formData, setFormData] = useState({
@@ -85,13 +85,13 @@ const EditCandidate = () => {
           { label: "Ready to Travel", name: "readyToTravel" },
           { label: "Email", name: "email", type: "email" },
           { label: "Mobile No", name: "mobileNum", type: "number" },
-        ].map(({ label, name, type = "text" }) => (
+        ].map(({ label, name, type }) => (
           <div className="relative" key={name}>
             <label htmlFor={name} className="text-sm text-gray-600">
               {label}
             </label>
             <input
-            disabled={name=="sNo"?true:false}
+              disabled={name == "sNo" ? true : false}
               type={type}
               id={name}
               name={name}

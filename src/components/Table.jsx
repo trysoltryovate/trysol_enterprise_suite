@@ -1,13 +1,12 @@
 /* eslint-disable simple-import-sort/imports */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FiEdit, FiTrash, FiInfo, FiUser } from "react-icons/fi";
+import { FiEdit, FiTrash, FiInfo, FiUser, FiDownload } from "react-icons/fi";
 import { ImSpinner2 } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-
-const API_BASE_URL = "http://192.168.0.224:8082";
+import * as XLSX from "xlsx";
+const API_BASE_URL = "http://192.168.0.225:8082";
 
 const CandidateTable = () => {
   const [candidates, setCandidates] = useState([]);
@@ -46,8 +45,17 @@ const CandidateTable = () => {
   const handleEditClick = (candidate) => {
     navigate(`/candidates/edit/${candidate.sNo}`);
   };
+  const exportToExcel = () => {
+    // Convert JSON data to worksheet
+    const worksheet = XLSX.utils.json_to_sheet(candidates);
 
+    // Create a workbook and add the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
+    // Trigger download using XLSX.writeFile
+    XLSX.writeFile(workbook, "IRR.xlsx");
+  };
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="rounded-lg bg-white p-6 shadow-md">
@@ -61,32 +69,51 @@ const CandidateTable = () => {
             Candidates List
           </h2>
 
-          <Link
-            className="flex items-center rounded bg-green-500 px-2 py-2 text-white"
-            to="/candidates/add"
-          >
-            {/* <FiUser className="mr-2" /> */}
-            <button
-              className="group mr-2 cursor-pointer outline-none duration-300 hover:rotate-180"
-              title="Add candidate"
+          
+          <div className="flex">
+            <Link
+              className="flex items-center rounded-md bg-green-500 px-2 py-2 text-white"
+              to="/candidates/add"
             >
-              <svg
-                class="fill-none stroke-teal-400 duration-300 group-hover:fill-white group-active:fill-teal-500 group-active:stroke-teal-200 group-active:duration-0"
-                viewBox="0 0 24 24"
-                height="30px"
-                width="30px"
-                xmlns="http://www.w3.org/2000/svg"
+              <button
+                className="group mr-2 cursor-pointer outline-none duration-300 hover:rotate-180"
+                title="Add candidate"
               >
-                <path
-                  stroke-width="1.5"
-                  d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-                ></path>
-                <path stroke-width="1.5" d="M8 12H16"></path>
-                <path stroke-width="1.5" d="M12 16V8"></path>
-              </svg>
-            </button>
-            Add Candidate
-          </Link>
+                <svg
+                  class="fill-none stroke-teal-400 duration-300 group-hover:fill-white group-active:fill-teal-500 group-active:stroke-teal-200 group-active:duration-0"
+                  viewBox="0 0 24 24"
+                  height="30px"
+                  width="30px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-width="1.5"
+                    d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                  ></path>
+                  <path stroke-width="1.5" d="M8 12H16"></path>
+                  <path stroke-width="1.5" d="M12 16V8"></path>
+                </svg>
+              </button>
+              Add Candidate
+            </Link>
+
+
+
+<button
+      type="button"
+      className="relative w-[150px] h-12 ml-2 cursor-pointer flex items-center border bg-green-500 rounded-md overflow-hidden transition-all duration-300 group"
+      onClick={exportToExcel}
+    >
+      <span className="text-white font-semibold transform translate-x-[22px] transition-all duration-300 group-hover:text-transparent">
+      Export csv
+      </span>
+      <span className="absolute transform translate-x-[109px] h-full w-[39px] bg-[#17795E] flex items-center justify-center transition-all duration-300 group-hover:w-[148px] group-hover:translate-x-0 group-active:bg-[#146c54]">
+        <FiDownload className="w-5 h-5 text-white" />
+      </span>
+    </button>
+
+
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -121,9 +148,9 @@ const CandidateTable = () => {
               </tr>
             </thead>
             <tbody>
-              {candidates.map((candidate) => (
+              {candidates.map((candidate, i) => (
                 <tr key={candidate.id} className="border">
-                  <td className="px-4 py-2">{candidate.sNo}</td>
+                  <td className="px-4 py-2">{i + 1}</td>
                   <td className="px-4 py-2">{candidate.mode}</td>
                   <td className="px-4 py-2">{candidate.name}</td>
                   <td className="px-4 py-2">{candidate.skill}</td>
