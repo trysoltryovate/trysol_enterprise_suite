@@ -105,7 +105,7 @@ const CandidateTable = () => {
       onClick={exportToExcel}
     >
       <span className="text-white font-semibold transform translate-x-[22px] transition-all duration-300 group-hover:text-transparent">
-      Export csv
+      Download
       </span>
       <span className="absolute transform translate-x-[109px] h-full w-[39px] bg-[#17795E] flex items-center justify-center transition-all duration-300 group-hover:w-[148px] group-hover:translate-x-0 group-active:bg-[#146c54]">
         <FiDownload className="w-5 h-5 text-white" />
