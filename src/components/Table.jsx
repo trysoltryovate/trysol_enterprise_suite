@@ -1,25 +1,23 @@
 /* eslint-disable simple-import-sort/imports */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  FiEdit,
-  FiTrash,
-  FiInfo,
-  FiUser,
-  FiDownload,
-  FiSearch,
-} from "react-icons/fi";
+import { FiEdit, FiTrash, FiInfo, FiSearch, FiDownload } from "react-icons/fi";
 import { ImSpinner2 } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import * as XLSX from "xlsx";
-const API_BASE_URL = "http://192.168.0.225:8082";
+import * as XLSX from "xlsx"; // Ensure you have this import
+
+const API_BASE_URL = "http://192.168.0.224:8082";
 
 const CandidateTable = () => {
   const [candidates, setCandidates] = useState([]);
   const [loadingDeleteId, setLoadingDeleteId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCandidates, setSelectedCandidates] = useState([]); // State for storing selected candidates
+
   const navigate = useNavigate();
+
+  // Fetch all candidates
   const fetchCandidates = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/getAll`);
@@ -28,10 +26,12 @@ const CandidateTable = () => {
       console.error("Error fetching candidates:", error);
     }
   };
+
   useEffect(() => {
     fetchCandidates();
   }, []);
 
+  // Handle delete action
   const handleDelete = async (id) => {
     setLoadingDeleteId(id);
     await new Promise((resolve) => setTimeout(resolve, 400));
@@ -50,21 +50,39 @@ const CandidateTable = () => {
     }
     setLoadingDeleteId(null);
   };
+
+  // Handle row selection
+  const handleRowSelect = (id) => {
+    setSelectedCandidates((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((candidateId) => candidateId !== id)
+        : [...prevSelected, id],
+    );
+  };
+
+  // Handle edit click
   const handleEditClick = (candidate) => {
     navigate(`/candidates/edit/${candidate.sNo}`);
   };
+
+  // Export selected rows to Excel
   const exportToExcel = () => {
-    // Convert JSON data to worksheet
-    const worksheet = XLSX.utils.json_to_sheet(candidates);
+    const selectedRows = candidates.filter((candidate) =>
+      selectedCandidates.includes(candidate.sNo),
+    );
 
-    // Create a workbook and add the worksheet
+    if (selectedRows.length === 0) {
+      alert("Please select at least one row to export.");
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(selectedRows);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-    // Trigger download using XLSX.writeFile
-    XLSX.writeFile(workbook, "IRR.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "SelectedCandidates");
+    XLSX.writeFile(workbook, "Selected_Candidates.xlsx");
   };
 
+  // Filter candidates based on search term
   const filteredCandidates = candidates.filter((candidate) => {
     const term = searchTerm.trim().toLowerCase();
     if (!term) return true;
@@ -168,12 +186,27 @@ const CandidateTable = () => {
           <table className="w-full rounded-lg border border-gray-300 bg-white shadow-md">
             <thead className="bg-gray-200">
               <tr>
+                <th className="border px-4 py-2">
+                  <input
+                    type="checkbox"
+                    onChange={() => {
+                      if (selectedCandidates.length === candidates.length) {
+                        setSelectedCandidates([]); // Deselect all
+                      } else {
+                        setSelectedCandidates(
+                          candidates.map((candidate) => candidate.sNo),
+                        ); // Select all
+                      }
+                    }}
+                    checked={selectedCandidates.length === candidates.length}
+                  />
+                </th>
                 {[
                   "S.No",
                   "Mode",
                   "Name",
                   "Skill",
-                  "projects/Shadow",
+                  "Projects/Shadow",
                   "Experience",
                   "NDA",
                   "CV Ready",
@@ -181,8 +214,8 @@ const CandidateTable = () => {
                   "Date Of NDA",
                   "Notary",
                   "Affidavit",
-                  "salary On Deployed",
-                  "salary On Bench",
+                  "Salary On Deployed",
+                  "Salary On Bench",
                   "Ready To Travel",
                   "Email",
                   "Mobile Num",
@@ -198,6 +231,13 @@ const CandidateTable = () => {
             <tbody>
               {filteredCandidates.map((candidate, i) => (
                 <tr key={candidate.id} className="border">
+                  <td className="px-4 py-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedCandidates.includes(candidate.sNo)}
+                      onChange={() => handleRowSelect(candidate.sNo)}
+                    />
+                  </td>
                   <td className="px-4 py-2">{i + 1}</td>
                   <td className="px-4 py-2">{candidate.mode}</td>
                   <td className="px-4 py-2">{candidate.name}</td>
@@ -238,7 +278,6 @@ const CandidateTable = () => {
                   </td>
                 </tr>
               ))}
-
               {filteredCandidates.length === 0 && (
                 <tr>
                   <td colSpan="19" className="p-4 text-center text-gray-500">
