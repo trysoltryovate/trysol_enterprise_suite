@@ -66,15 +66,7 @@ export default function Login() {
         ) : (
           <LoginForm />
         )}
-
-        {/* Login / Signup Section */}
       </div>
-
-      {/* <div className="mt-10 text-center">
-        <Link to="/home" className="text-lg text-white hover:underline">
-          Go to Home
-        </Link>
-      </div> */}
     </div>
   );
 }
