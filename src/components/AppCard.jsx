@@ -4,19 +4,16 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { appsList } from "../utils/lists";
 import Navbar from "../components/Navbar";
+import HomeNav from "./HomeNav";
 
 const Appcard = () => {
   const navigate = useNavigate();
 
-  // const handleClick = () => {
-  //   // Navigate to the candidates table
-  //   navigate("/candidates");
-  // };
-
   return (
     <>
       <div className="container">
-        <Navbar />
+        {/* <Navbar /> */}
+        <HomeNav/>
         <div className="grid grid-cols-1 place-items-center gap-10 sm:grid-cols-2 md:grid-cols-3">
           {appsList.map((data) => (
             <div

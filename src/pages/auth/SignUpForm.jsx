@@ -43,15 +43,7 @@ export default function SignUpForm() {
       : { message: "Phone number must be at least 10 digits.", isError: true };
   };
 
-  // const validatePassword = (password) => {
-  //   if (password.length < 6) {
-  //     return {
-  //       isError: true,
-  //       message: "Password must be at least 6 characters",
-  //     };
-  //   }
-  //   return { isError: false, message: "Looks good!" };
-  // };
+  
 
   const validatePassword = (value) => {
     const minLength = value.length >= 8;
