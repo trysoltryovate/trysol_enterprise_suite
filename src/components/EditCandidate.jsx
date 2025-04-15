@@ -1,9 +1,9 @@
-
 /* eslint-disable simple-import-sort/imports */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiInfo } from "react-icons/fi";
+import HomeNav from "./HomeNav";
 
 const API_BASE_URL = "http://192.168.0.224:8082";
 
@@ -61,6 +61,7 @@ const EditCandidate = () => {
 
   return (
     <div className="p-6">
+      <HomeNav />
       <p className="mb-4 flex items-center rounded-md bg-blue-100 p-3 text-gray-600">
         <FiInfo className="mr-2" />
         Use this form to edit the candidate's information in the organization.
@@ -92,7 +93,7 @@ const EditCandidate = () => {
               {label}
             </label>
             <input
-            disabled={name=="sNo"?true:false}
+              disabled={name == "sNo" ? true : false}
               type={type}
               id={name}
               name={name}

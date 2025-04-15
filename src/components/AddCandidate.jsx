@@ -1,8 +1,8 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 import { FiInfo } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import HomeNav from "./HomeNav";
 
 const API_BASE_URL = "http://192.168.0.224:8082";
 
@@ -64,20 +64,21 @@ function AddCandidate() {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/employee-save`,
-        formData
+        formData,
       );
       console.log("Response:", response.data);
       navigate("/candidates");
     } catch (error) {
       console.error(
         "Error adding candidate:",
-        error.response ? error.response.data : error.message
+        error.response ? error.response.data : error.message,
       );
     }
   };
 
   return (
     <div className="bg-white p-6 shadow-md">
+      <HomeNav />
       <p className="mb-4 flex items-center rounded-md bg-blue-100 p-3 text-gray-600">
         <FiInfo className="mr-2" />
         Use this form to add a new candidate to the organization.
