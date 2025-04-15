@@ -4,11 +4,11 @@ import axios from "axios";
 import { FiInfo } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE_URL = "http://192.168.0.225:8082";
+const API_BASE_URL = "http://192.168.0.224:8082";
 
 function AddCandidate() {
   const [formData, setFormData] = useState({
-    mode: "",
+    mode: " ",
     name: "",
     skill: "",
     projectsShadow: "",
