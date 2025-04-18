@@ -21,9 +21,6 @@ function HomeNav() {
             <p className="ml-[5px]">LogOut</p>
           </div>
         </Link>
-        {/* <Link to={"/"}>
-          <FaPowerOff className="text-3xl text-[#a38eff]" />
-        </Link> */}
       </div>
     </div>
   );
