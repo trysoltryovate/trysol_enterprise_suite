@@ -1,4 +1,3 @@
-// (same imports as before)
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FiEdit, FiTrash, FiInfo, FiSearch, FiDownload } from "react-icons/fi";
@@ -7,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.224:8082";
+const API_BASE_URL = "http://192.168.0.225:8082";
 
 const CandidateTable = () => {
   const [candidates, setCandidates] = useState([]);

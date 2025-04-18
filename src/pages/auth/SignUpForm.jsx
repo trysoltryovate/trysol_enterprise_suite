@@ -1,104 +1,96 @@
 import { useState } from "react";
+import axios from "axios";
 import { IoMdEyeOff, IoMdInformationCircle } from "react-icons/io";
-import { FaCircleCheck } from "react-icons/fa6";
 import { IoEye } from "react-icons/io5";
+import { FaUser, FaPhone } from "react-icons/fa6";
+import LoginForm from "./LoginForm";
 
 export default function SignUpForm() {
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
-    phone: "",
+    mobile: "",
     password: "",
     confirmPassword: "",
   });
+
   const [isPassVisible, setIsPassVisible] = useState(false);
   const [isConfirmPassVisible, setIsConfirmPassVisible] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [phoneError, setPhoneError] = useState("");
+  const [mobileError, setMobileError] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [nameError, setNameError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
-  const validateName = (value) => {
+  const validateUsername = (value) => {
     const isValid = /^[A-Za-z\s]{2,50}$/.test(value);
     return isValid
       ? { message: "", isError: false }
       : {
-          message: "Enter a valid name (only letters, 2-50 chars).",
+          message: "Enter a valid username (only letters, 2-50 chars).",
           isError: true,
         };
   };
 
   const validateEmail = (value) => {
-    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); // Regex to check email format
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     return isValid
       ? { message: "", isError: false }
       : { message: "Enter a valid email address.", isError: true };
   };
 
-  const validatePhone = (value) => {
-    const isValid = /^\d{10,}$/.test(value); // Ensures at least 10 digits
+  const validateMobile = (value) => {
+    const isValid = /^\d{10,}$/.test(value);
     return isValid
       ? { message: "", isError: false }
-      : { message: "Phone number must be at least 10 digits.", isError: true };
+      : { message: "Mobile number must be at least 10 digits.", isError: true };
   };
-
-  
 
   const validatePassword = (value) => {
     const minLength = value.length >= 8;
     const hasNumber = /[0-9]/.test(value);
     const hasSymbol = /[!@#$%&*]/.test(value);
 
-    if (!value)
-      return {
-        message: "Password is required!",
-        isError: true,
-        isSuccess: false,
-      };
+    if (!value) return { message: "Password is required!", isError: true };
     if (!minLength)
       return {
         message: "Password must be at least 8 characters long.",
         isError: true,
-        isSuccess: false,
       };
     if (!hasNumber)
       return {
         message: "Password must contain at least one number 0 - 9.",
         isError: true,
-        isSuccess: false,
       };
     if (!hasSymbol)
       return {
         message: "Password must contain at least one symbol eg. !@#$%&*",
         isError: true,
-        isSuccess: false,
       };
 
-    return {
-      message: "Your password meets requirements.",
-      isError: false,
-      isSuccess: true,
-    };
+    return { message: "Your password meets requirements.", isError: false };
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    if (name === "name") {
-      const validation = validateName(value);
-      setNameError(validation.isError ? validation.message : ""); // Store error message or empty string
+    if (name === "username") {
+      const validation = validateUsername(value);
+      setUsernameError(validation.message);
     }
 
     if (name === "email") {
       const validation = validateEmail(value);
       setEmailError(validation.message);
     }
-    if (name === "phone") {
-      const validation = validatePhone(value);
-      setPhoneError(validation.message);
+
+    if (name === "mobile") {
+      const validation = validateMobile(value);
+      setMobileError(validation.message);
     }
+
     if (name === "password") {
       const validation = validatePassword(value);
       setPasswordError(validation.message);
@@ -111,99 +103,137 @@ export default function SignUpForm() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const usernameValidation = validateUsername(formData.username);
+    const emailValidation = validateEmail(formData.email);
+    const mobileValidation = validateMobile(formData.mobile);
+    const passwordValidation = validatePassword(formData.password);
+    const passwordsMatch = formData.password === formData.confirmPassword;
+
+    setUsernameError(usernameValidation.message);
+    setEmailError(emailValidation.message);
+    setMobileError(mobileValidation.message);
+    setPasswordError(passwordValidation.message);
+    setConfirmPasswordError(passwordsMatch ? "" : "Passwords do not match");
+
+    if (
+      usernameValidation.isError ||
+      emailValidation.isError ||
+      mobileValidation.isError ||
+      passwordValidation.isError ||
+      !passwordsMatch
+    ) {
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://192.168.0.225:8082/save",
+        formData,
+      );
+
+      if (response.status === 200) {
+        alert("User registered successfully!");
+        console.log("Response from server:", response.data);
+
+        setFormData({
+          username: "",
+          email: "",
+          mobile: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setIsSignupSuccess(true);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error connecting to server.");
+    }
+  };
+  if (isSignupSuccess) {
+    return <LoginForm />;
+  }
+
+  const iconComponents = {
+    username: <FaUser />,
+    email: <IoMdInformationCircle />,
+    mobile: <FaPhone />,
+  };
+
   return (
-    <form className="mt-6 max-h-[80vh] content-center overflow-auto rounded-lg bg-white bg-opacity-40 p-8 shadow-md lg:mt-0 lg:w-1/3">
+    <form
+      onSubmit={handleSubmit}
+      className="scrollbar-hide mt-6 max-h-[70vh] w-full max-w-sm content-center overflow-auto rounded-3xl bg-white bg-opacity-40 p-8 shadow-md lg:mt-0 lg:w-1/3"
+    >
       <h2 className="mb-4 text-center text-xl font-semibold text-gray-900">
         Sign Up
       </h2>
-      {[
-        {
-          label: "Name",
-          type: "text",
-          name: "name",
-          placeholder: "Enter your name",
-        },
-        {
-          label: "Email",
-          type: "email",
-          name: "email",
-          placeholder: "Enter your email",
-        },
-        {
-          label: "Phone No",
-          type: "tel",
-          name: "phone",
-          placeholder: "Enter your phone number",
-        },
-      ].map(({ label, type, name, placeholder }) => (
-        <div key={name} className="mb-3 flex flex-col gap-y-1">
+
+      {["username", "email", "mobile"].map((field) => (
+        <div key={field} className="mb-3 flex flex-col gap-y-1">
           <label className="ml-1 w-max text-sm font-semibold opacity-80">
-            {label}
+            {field === "username"
+              ? "Username"
+              : field === "email"
+                ? "Email"
+                : "Mobile No"}
           </label>
-          <input
-            type={type}
-            name={name}
-            value={formData[name]}
-            onChange={handleChange}
-            placeholder={placeholder}
-            className={`border ${
-              name === "email"
-                ? formData.email.length === 0
+          <div className="relative">
+            <span className="absolute left-3 top-2.5 text-lg text-gray-400">
+              {iconComponents[field]}
+            </span>
+            <input
+              type={
+                field === "email"
+                  ? "email"
+                  : field === "mobile"
+                    ? "tel"
+                    : "text"
+              }
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              placeholder={`Enter your ${field}`}
+              className={`border-0 border-b-2 pl-9 ${
+                formData[field].length === 0
                   ? "border-gray-400"
-                  : !validateEmail(formData.email).isError
-                    ? "border-green-500 focus-visible:ring-green-100"
-                    : "border-red-500 focus-visible:ring-red-100"
-                : name === "phone"
-                  ? formData.phone.length === 0
-                    ? "border-gray-400"
-                    : !validatePhone(formData.phone).isError
-                      ? "border-green-500 focus-visible:ring-green-100"
-                      : "border-red-500 focus-visible:ring-red-100"
-                  : name === "name"
-                    ? formData.name.length === 0
-                      ? "border-gray-400"
-                      : formData.name.length >= 3
-                        ? "border-green-500 focus-visible:ring-green-100"
-                        : "border-red-500 focus-visible:ring-red-100"
-                    : "border-gray-400"
-            } bg-background my-1 flex h-9 w-full rounded-md px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
-          />
-          {name === "name" && (
-            <p
-              className={`text-[12px] font-semibold ${
-                nameError
-                  ? "text-red-500 opacity-100"
-                  : "text-green-700 opacity-0"
-              }`}
-            >
-              {nameError}
-            </p>
-          )}
-          {name === "email" && (
-            <p
-              className={`text-[12px] font-semibold ${
-                emailError
-                  ? "text-red-500 opacity-100"
-                  : "text-green-700 opacity-0"
-              }`}
-            >
-              {emailError}
-            </p>
-          )}
-          {name === "phone" && (
-            <p
-              className={`text-[12px] font-semibold ${
-                phoneError
-                  ? "text-red-500 opacity-100"
-                  : "text-green-700 opacity-0"
-              }`}
-            >
-              {phoneError}
-            </p>
-          )}
+                  : field === "email"
+                    ? !validateEmail(formData[field]).isError
+                      ? "border-green-500"
+                      : "border-red-500"
+                    : field === "mobile"
+                      ? !validateMobile(formData[field]).isError
+                        ? "border-green-500"
+                        : "border-red-500"
+                      : !validateUsername(formData[field]).isError
+                        ? "border-green-500"
+                        : "border-red-500"
+              } bg-background my-1 flex h-9 w-full rounded-md px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
+            />
+          </div>
+          <p
+            className={`text-[12px] font-semibold ${
+              (field === "username" && usernameError) ||
+              (field === "email" && emailError) ||
+              (field === "mobile" && mobileError)
+                ? "text-red-500 opacity-100"
+                : "text-green-700 opacity-0"
+            }`}
+          >
+            {field === "username"
+              ? usernameError
+              : field === "email"
+                ? emailError
+                : mobileError}
+          </p>
         </div>
       ))}
-      {["password", "confirmPassword"].map((field, index) => (
+
+      {["password", "confirmPassword"].map((field) => (
         <div key={field} className="mb-3 flex flex-col gap-y-1">
           <label className="ml-1 w-max text-sm font-semibold opacity-80">
             {field === "password" ? "Password" : "Confirm Password"}
@@ -226,18 +256,18 @@ export default function SignUpForm() {
                   ? formData.password.length === 0
                     ? "border-gray-400"
                     : !validatePassword(formData.password).isError
-                      ? "border-green-500 focus-visible:ring-green-100"
-                      : "border-red-500 focus-visible:ring-red-100"
+                      ? "border-green-500"
+                      : "border-red-500"
                   : formData.confirmPassword.length === 0
                     ? "border-gray-400"
                     : formData.confirmPassword === formData.password
-                      ? "border-green-500 focus-visible:ring-green-100"
-                      : "border-red-500 focus-visible:ring-red-100"
-              } bg-background ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm`}
+                      ? "border-green-500"
+                      : "border-red-500"
+              } bg-background ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
             />
             <button
               type="button"
-              className="absolute right-2 top-2 rounded-md px-2 py-1 text-gray-400 hover:text-gray-700"
+              className="absolute right-2 top-2 rounded-md px-2 py-1 text-gray-800 hover:text-gray-700"
               onClick={() =>
                 field === "password"
                   ? setIsPassVisible(!isPassVisible)
@@ -260,28 +290,27 @@ export default function SignUpForm() {
           <p
             className={`text-[12px] font-semibold ${
               field === "password"
-                ? !validatePassword(formData.password).isError
+                ? passwordError && !validatePassword(formData.password).isError
                   ? "text-green-700"
                   : "text-red-500"
-                : formData.confirmPassword.length === 0
-                  ? "text-red-500 opacity-0"
-                  : formData.confirmPassword === formData.password
-                    ? "text-green-700"
-                    : "text-red-500"
+                : formData.confirmPassword === formData.password
+                  ? "text-green-700"
+                  : "text-red-500"
             }`}
           >
             {field === "password"
               ? passwordError
               : formData.confirmPassword.length === 0
                 ? ""
-                : formData.confirmPassword === formData.password
-                  ? "Passwords match!"
-                  : "Passwords do not match"}
+                : confirmPasswordError}
           </p>
         </div>
       ))}
 
-      <button className="mt-2 w-full rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-600">
+      <button
+        type="submit"
+        className="mt-2 w-full rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-600"
+      >
         Sign Up
       </button>
       <p className="opacity-120 mt-1 text-[15px] font-semibold">

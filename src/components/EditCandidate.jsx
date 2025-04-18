@@ -1,11 +1,10 @@
-/* eslint-disable simple-import-sort/imports */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiInfo } from "react-icons/fi";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.224:8082";
+const API_BASE_URL = "http://192.168.0.225:8082";
 
 const EditCandidate = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +27,7 @@ const EditCandidate = () => {
     mobileNum: "",
   });
 
-  const { id } = useParams(); // Assuming sNo or id is passed as URL param
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   useEffect(() => {

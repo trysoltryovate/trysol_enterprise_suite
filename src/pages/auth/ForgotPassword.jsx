@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { FaLock } from "react-icons/fa";
 import { IoEye } from "react-icons/io5";
@@ -60,7 +61,7 @@ export default function ForgotPassword() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -88,15 +89,42 @@ export default function ForgotPassword() {
       return;
     }
 
-    setIsSuccess(true);
-    setMessage("");
-    setShowSuccessModal(true);
+    try {
+      const response = await axios.post(
+        "http://192.168.0.225:8082/api/forgotpassword",
+        { email, password, confirmPassword },
+      );
 
-    // After 2 seconds, hide modal and show login form
-    setTimeout(() => {
-      setShowSuccessModal(false);
-      setShowLoginForm(true);
-    }, 1000);
+      if (response.status === 200) {
+        setIsSuccess(true);
+        setMessage("");
+        setShowSuccessModal(true);
+
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          setShowLoginForm(true);
+        }, 2000);
+      } else {
+        setMessage("An error occurred. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during password reset:", error);
+
+      if (error.response) {
+        console.error("Backend error response:", error.response);
+        setMessage(
+          error.response.data?.message ||
+          error.response.data?.error ||
+          `Error ${error.response.status}: Something went wrong.`,
+        );
+      } else if (error.request) {
+        console.error("No response from backend:", error.request);
+        setMessage("No response from the server. Please try again later.");
+      } else {
+        console.error("Error in request setup:", error.message);
+        setMessage("There was an error in the request. Please try again.");
+      }
+    }
   };
 
   if (showLoginForm) {
@@ -127,13 +155,12 @@ export default function ForgotPassword() {
             value={email}
             onChange={validateEmail}
             placeholder="example@email.com"
-            className={`border-0 border-b-2 py-5 pl-8 ${
-              emailError === ""
+            className={`border-0 border-b-2 py-5 pl-8 ${emailError === ""
                 ? "border-gray-400"
                 : emailError.includes("correct")
                   ? "border-green-500 focus-visible:ring-green-100"
                   : "border-red-500 focus-visible:ring-red-100"
-            } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
+              } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
           />
           {emailError && !emailError.includes("correct") && (
             <p className="mt-1 text-sm text-red-500">{emailError}</p>
@@ -167,13 +194,12 @@ export default function ForgotPassword() {
                 setPasswordError(validation.message);
                 setIsSuccess(validation.isSuccess);
               }}
-              className={`border-0 border-b-2 py-2 pl-8 ${
-                password.length === 0
+              className={`border-0 border-b-2 py-2 pl-8 ${password.length === 0
                   ? "border-gray-400"
                   : isSuccess && !isLoginFailed
                     ? "border-green-500 focus-visible:ring-green-100"
                     : "border-red-500 focus-visible:ring-red-100"
-              } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
+                } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
               placeholder="Enter password"
             />
             <button
@@ -184,9 +210,8 @@ export default function ForgotPassword() {
               {isPassVisible ? <IoMdEyeOff /> : <IoEye />}
             </button>
             <p
-              className={`inline-flex items-center gap-x-1 text-[12px] font-semibold ${
-                isSuccess ? "text-green-600" : "text-red-500"
-              } ${passwordError ? "opacity-100" : "opacity-0"}`}
+              className={`inline-flex items-center gap-x-1 text-[12px] font-semibold ${isSuccess ? "text-green-600" : "text-red-500"
+                } ${passwordError ? "opacity-100" : "opacity-0"}`}
             >
               {isSuccess ? <FaCircleCheck /> : <IoMdInformationCircle />}{" "}
               {passwordError}
@@ -212,20 +237,18 @@ export default function ForgotPassword() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm password"
-            className={`border-0 border-b-2 py-6 pl-8 ${
-              confirmPassword.length === 0
+            className={`border-0 border-b-2 py-6 pl-8 ${confirmPassword.length === 0
                 ? "border-gray-400"
                 : confirmPassword === password
                   ? "border-green-500 focus-visible:ring-green-100"
                   : "border-red-500 focus-visible:ring-red-100"
-            } ring-offset-background placeholder:text-muted-foreground my-1 flex h-10 w-full rounded-md bg-transparent px-3 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
+              } ring-offset-background placeholder:text-muted-foreground my-1 flex h-10 w-full rounded-md bg-transparent px-3 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
           />
           <p
-            className={`text-sm font-semibold ${
-              confirmPassword.length > 0 && confirmPassword !== password
+            className={`text-sm font-semibold ${confirmPassword.length > 0 && confirmPassword !== password
                 ? "text-red-500"
                 : "text-green-600"
-            }`}
+              }`}
           >
             {confirmPassword.length > 0 &&
               (confirmPassword === password
@@ -257,7 +280,6 @@ export default function ForgotPassword() {
       )}
 
       {/* Success Modal */}
-
       {showSuccessModal && (
         <div className="insert-0 fixed left-1/3 top-0 z-50 mt-4 items-center justify-center bg-opacity-50">
           <div className="flex w-[500px] justify-center rounded-2xl border border-green-400 bg-green-100 py-6 text-center text-sm font-medium text-green-700">
