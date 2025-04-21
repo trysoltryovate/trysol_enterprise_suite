@@ -2,9 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiInfo } from "react-icons/fi";
+import { FaCircleCheck } from "react-icons/fa6";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.225:8082";
+const API_BASE_URL = "http://192.168.0.226:8082";
 
 const EditCandidate = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,9 @@ const EditCandidate = () => {
     mobileNum: "",
   });
 
-  const { id } = useParams(); 
+  const [showModal, setShowModal] = useState(false);
+
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +55,11 @@ const EditCandidate = () => {
     e.preventDefault();
     try {
       await axios.put(`${API_BASE_URL}/update/${id}`, formData);
-      navigate("/candidates");
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        navigate("/candidates");
+      }, 2000);
     } catch (error) {
       console.error("Error updating candidate:", error);
     }
@@ -61,13 +68,15 @@ const EditCandidate = () => {
   return (
     <div className="p-6">
       <HomeNav />
+
       <p className="mb-4 flex items-center rounded-md bg-blue-100 p-3 text-gray-600">
         <FiInfo className="mr-2" />
         Use this form to edit the candidate's information in the organization.
       </p>
+
       <h2 className="mb-4 text-2xl font-semibold">Edit Candidate</h2>
+
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-        {/* Text Fields */}
         {[
           { label: "S.No", name: "sNo" },
           { label: "Mode", name: "mode" },
@@ -92,7 +101,7 @@ const EditCandidate = () => {
               {label}
             </label>
             <input
-              disabled={name == "sNo" ? true : false}
+              disabled={name === "sNo"}
               type={type}
               id={name}
               name={name}
@@ -119,6 +128,20 @@ const EditCandidate = () => {
           </button>
         </div>
       </form>
+
+      {/* Alert Modal */}
+      {showModal && (
+        <div className="insert-0 fixed left-1/3 top-0 z-50 mt-4 items-center justify-center bg-opacity-50">
+          <div className="flex w-[500px] justify-center rounded-2xl border border-green-400 bg-green-100 py-6 text-center text-sm font-medium text-green-700">
+            <div className="flex items-center justify-center gap-2">
+              <FaCircleCheck className="text-lg text-green-500" />
+              <span>
+                Edited candidate successfully! Redirecting to Table page...
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

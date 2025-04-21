@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { FiInfo } from "react-icons/fi";
+import { FaCircleCheck } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.225:8082";
+const API_BASE_URL = "http://192.168.0.226:8082";
 
 function AddCandidate() {
   const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ function AddCandidate() {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // For the success modal
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -67,7 +69,13 @@ function AddCandidate() {
         formData,
       );
       console.log("Response:", response.data);
-      navigate("/candidates");
+      setShowSuccessModal(true); // Show success modal on successful submission
+
+      // Close the modal automatically after 3 seconds and redirect
+      setTimeout(() => {
+        setShowSuccessModal(false);
+        navigate("/candidates");
+      }, 3000);
     } catch (error) {
       console.error(
         "Error adding candidate:",
@@ -147,6 +155,16 @@ function AddCandidate() {
           </button>
         </div>
       </form>
+      {showSuccessModal && (
+        <div className="insert-0 fixed left-1/3 top-0 z-50 mt-4 items-center justify-center bg-opacity-50">
+          <div className="flex w-[500px] justify-center rounded-2xl border border-green-400 bg-green-100 py-6 text-center text-sm font-medium text-green-700">
+            <div className="flex items-center justify-center gap-2">
+              <FaCircleCheck className="text-lg text-green-500" />
+              <span>Candidate added successfully!</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
