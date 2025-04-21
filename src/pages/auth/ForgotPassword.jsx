@@ -91,7 +91,7 @@ export default function ForgotPassword() {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.225:8082/api/forgotpassword",
+        "http://192.168.0.226:8082/api/forgotpassword",
         { email, password, confirmPassword },
       );
 
@@ -114,8 +114,8 @@ export default function ForgotPassword() {
         console.error("Backend error response:", error.response);
         setMessage(
           error.response.data?.message ||
-          error.response.data?.error ||
-          `Error ${error.response.status}: Something went wrong.`,
+            error.response.data?.error ||
+            `Error ${error.response.status}: Something went wrong.`,
         );
       } else if (error.request) {
         console.error("No response from backend:", error.request);
@@ -155,12 +155,13 @@ export default function ForgotPassword() {
             value={email}
             onChange={validateEmail}
             placeholder="example@email.com"
-            className={`border-0 border-b-2 py-5 pl-8 ${emailError === ""
+            className={`border-0 border-b-2 py-5 pl-8 ${
+              emailError === ""
                 ? "border-gray-400"
                 : emailError.includes("correct")
                   ? "border-green-500 focus-visible:ring-green-100"
                   : "border-red-500 focus-visible:ring-red-100"
-              } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
+            } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
           />
           {emailError && !emailError.includes("correct") && (
             <p className="mt-1 text-sm text-red-500">{emailError}</p>
@@ -194,12 +195,13 @@ export default function ForgotPassword() {
                 setPasswordError(validation.message);
                 setIsSuccess(validation.isSuccess);
               }}
-              className={`border-0 border-b-2 py-2 pl-8 ${password.length === 0
+              className={`border-0 border-b-2 py-2 pl-8 ${
+                password.length === 0
                   ? "border-gray-400"
                   : isSuccess && !isLoginFailed
                     ? "border-green-500 focus-visible:ring-green-100"
                     : "border-red-500 focus-visible:ring-red-100"
-                } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
+              } ring-offset-background placeholder:text-muted-foreground my-1 flex h-9 w-full rounded-md bg-transparent px-3 py-2 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
               placeholder="Enter password"
             />
             <button
@@ -210,8 +212,9 @@ export default function ForgotPassword() {
               {isPassVisible ? <IoMdEyeOff /> : <IoEye />}
             </button>
             <p
-              className={`inline-flex items-center gap-x-1 text-[12px] font-semibold ${isSuccess ? "text-green-600" : "text-red-500"
-                } ${passwordError ? "opacity-100" : "opacity-0"}`}
+              className={`inline-flex items-center gap-x-1 text-[12px] font-semibold ${
+                isSuccess ? "text-green-600" : "text-red-500"
+              } ${passwordError ? "opacity-100" : "opacity-0"}`}
             >
               {isSuccess ? <FaCircleCheck /> : <IoMdInformationCircle />}{" "}
               {passwordError}
@@ -237,18 +240,20 @@ export default function ForgotPassword() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm password"
-            className={`border-0 border-b-2 py-6 pl-8 ${confirmPassword.length === 0
+            className={`border-0 border-b-2 py-6 pl-8 ${
+              confirmPassword.length === 0
                 ? "border-gray-400"
                 : confirmPassword === password
                   ? "border-green-500 focus-visible:ring-green-100"
                   : "border-red-500 focus-visible:ring-red-100"
-              } ring-offset-background placeholder:text-muted-foreground my-1 flex h-10 w-full rounded-md bg-transparent px-3 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
+            } ring-offset-background placeholder:text-muted-foreground my-1 flex h-10 w-full rounded-md bg-transparent px-3 text-base font-medium opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-sm`}
           />
           <p
-            className={`text-sm font-semibold ${confirmPassword.length > 0 && confirmPassword !== password
+            className={`text-sm font-semibold ${
+              confirmPassword.length > 0 && confirmPassword !== password
                 ? "text-red-500"
                 : "text-green-600"
-              }`}
+            }`}
           >
             {confirmPassword.length > 0 &&
               (confirmPassword === password

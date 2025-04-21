@@ -19,6 +19,7 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignup] = useState(false);
   const [isForgot, setIsForgot] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -30,7 +31,7 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
         ? value.length < 4
           ? "At least 4 characters needed"
           : "Login ID is correct."
-        : "Login ID is required!"
+        : "Login ID is required!",
     );
   };
 
@@ -86,15 +87,19 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.225:8082/login",
+        "http://192.168.0.226:8082/login",
         data,
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       if (response.status === 200) {
-        navigate("/home");
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          navigate("/home");
+        }, 1500);
       } else {
         setIsLoginFailed(true);
       }
@@ -146,8 +151,8 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
                   loginId.length < 4
                     ? "border-gray-400"
                     : loginIdError.includes("correct") && !isLoginFailed
-                    ? "border-green-500 focus-visible:ring-green-100"
-                    : "border-red-500 focus-visible:ring-red-100"
+                      ? "border-green-500 focus-visible:ring-green-100"
+                      : "border-red-500 focus-visible:ring-red-100"
                 }`}
               />
             </div>
@@ -203,8 +208,8 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
                   isSuccess && !isLoginFailed
                     ? "border-green-500 focus-visible:ring-green-100"
                     : password.length > 0
-                    ? "border-red-500 focus-visible:ring-red-100"
-                    : "border-gray-400"
+                      ? "border-red-500 focus-visible:ring-red-100"
+                      : "border-gray-400"
                 }`}
               />
               <button
@@ -262,6 +267,18 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
             </button>
           </p>
         </form>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="insert-0 fixed left-1/3 top-0 z-50 mt-4 items-center justify-center bg-opacity-50">
+          <div className="flex w-[500px] justify-center rounded-2xl border border-green-400 bg-green-100 py-6 text-center text-sm font-medium text-green-700">
+            <div className="flex items-center justify-center gap-2">
+              <FaCircleCheck className="text-lg text-green-500" />
+              <span>Login Successful!! Redirecting to Home page...</span>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
