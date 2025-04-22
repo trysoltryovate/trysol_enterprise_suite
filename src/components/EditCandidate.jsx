@@ -5,7 +5,7 @@ import { FiInfo } from "react-icons/fi";
 import { FaCircleCheck } from "react-icons/fa6";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.226:8082";
+const API_BASE_URL = "http://192.168.0.225:8082";
 
 const EditCandidate = () => {
   const [formData, setFormData] = useState({

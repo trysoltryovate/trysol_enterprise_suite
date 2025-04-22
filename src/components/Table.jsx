@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.226:8082";
+const API_BASE_URL = "http://192.168.0.225:8082";
 
 const CandidateTable = () => {
   const [candidates, setCandidates] = useState([]);

@@ -132,7 +132,7 @@ export default function SignUpForm() {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.226:8082/save",
+        "http://192.168.0.225:8082/save",
         formData,
       );
 
@@ -338,3 +338,6 @@ export default function SignUpForm() {
     </>
   );
 }
+
+
+
