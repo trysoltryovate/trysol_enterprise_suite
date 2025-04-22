@@ -18,7 +18,7 @@ function HomeNav() {
       setTimeout(() => {
         setIsModalOpen(false);
         navigate("/"); // Redirect to home or login page
-      }, 2000);
+      }, 900);
     }
   }, [isModalOpen, navigate]);
 

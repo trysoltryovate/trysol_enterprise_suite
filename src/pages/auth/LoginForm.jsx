@@ -87,7 +87,7 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.226:8082/login",
+        "http://192.168.0.225:8082/login",
         data,
         {
           headers: { "Content-Type": "application/json" },
@@ -221,12 +221,28 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
               </button>
             </div>
             <div className="mt-1 text-right text-sm">
-              <button
+              {/* <button
                 className="font-semibold text-blue-700 hover:underline"
                 onClick={() => setIsForgot(true)}
               >
                 Forgot Password?
+              </button> */}
+              <button
+                type="button"
+                className="font-semibold text-blue-700 hover:underline"
+                onClick={() => {
+                  if (!loginId && !password) {
+                    setLoginIdError("Login ID is required!");
+                    setPasswordError("Password is required!");
+                    setIsError(true);
+                    return;
+                  }
+                  setIsForgot(true);
+                }}
+              >
+                Forgot Password?
               </button>
+
             </div>
 
             {!isLoginFailed && (
