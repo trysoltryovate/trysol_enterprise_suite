@@ -91,7 +91,7 @@ export default function ForgotPassword() {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.225:8082/api/forgotpassword",
+        "http://192.168.0.224:8082/api/forgotpassword",
         { email, password, confirmPassword },
       );
 

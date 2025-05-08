@@ -5,38 +5,39 @@ import { FiInfo } from "react-icons/fi";
 import { FaCircleCheck } from "react-icons/fa6";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.224:8082";
+const API_BASE_URL = "http://192.168.0.224:8082/asset";
 
 const EditCandidate = () => {
   const [formData, setFormData] = useState({
-    sNo: "",
-    mode: "",
-    name: "",
-    skill: "",
-    projectsShadow: "",
-    experience: "",
-    nda: "",
-    cvReady: "",
-    linkedin: "",
-    dateOfNDA: "",
-    notary: "",
-    affidavit: "",
-    salaryOnDeployed: "",
-    salaryOnBench: "",
-    readyToTravel: "",
-    email: "",
-    mobileNum: "",
+    employeeId: "",
+    employeeName: "",
+    department: "",
+    assignedDate: "",
+    assetType: "",
+    make: "",
+    processor: "",
+    ram: "",
+    hardDisk: "",
+    charger: "",
+    chargerWatt: "",
+    bag: "",
+    modelNumber: "",
+    serialNumber: "",
+    issuedItPersonName: "",
+    approvedBy: "",
+    location: "",
+    mobileNumber: "",
   });
 
   const [showModal, setShowModal] = useState(false);
 
-  const { id } = useParams();
+  const { employeeId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCandidate = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/get/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/get/${employeeId}`);
         setFormData(response.data);
       } catch (error) {
         console.error("Error fetching candidate:", error);
@@ -44,7 +45,7 @@ const EditCandidate = () => {
     };
 
     fetchCandidate();
-  }, [id]);
+  }, [employeeId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +55,7 @@ const EditCandidate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${API_BASE_URL}/update/${id}`, formData);
+      await axios.put(`${API_BASE_URL}/update/${employeeId}`, formData);
       setShowModal(true);
       setTimeout(() => {
         setShowModal(false);
@@ -78,23 +79,34 @@ const EditCandidate = () => {
 
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
         {[
-          { label: "S.No", name: "sNo" },
-          { label: "Mode", name: "mode" },
-          { label: "Name", name: "name" },
-          { label: "Skill", name: "skill" },
-          { label: "Projects/Shadow", name: "projectsShadow" },
-          { label: "Experience", name: "experience" },
-          { label: "NDA", name: "nda" },
-          { label: "CV Ready", name: "cvReady" },
-          { label: "Linked In", name: "linkedin" },
-          { label: "Date of NDA", name: "dateOfNDA", type: "date" },
-          { label: "Notary", name: "notary" },
-          { label: "Affidavit", name: "affidavit" },
-          { label: "Salary On Deployed", name: "salaryOnDeployed" },
-          { label: "Salary on Bench", name: "salaryOnBench" },
-          { label: "Ready to Travel", name: "readyToTravel" },
-          { label: "Email", name: "email", type: "email" },
-          { label: "Mobile No", name: "mobileNum", type: "number" },
+          { label: "Employee ID", name: "employeeId" },
+          { label: "Employee Name", name: "employeeName" },
+          { label: "Department", name: "department" },
+          { label: "Assigned Date", name: "assignedDate", type: "date" },
+          { label: "Asset Type", name: "assetType" },
+          { label: "Make", name: "make" },
+          { label: "Processor", name: "processor" },
+          { label: "RAM", name: "ram" },
+          { label: "Hard Disk", name: "hardDisk" },
+          {
+            label: "Charger",
+            name: "charger",
+            type: "select",
+            options: ["Yes", "No"],
+          },
+          { label: "Charger Watt", name: "chargerWatt" },
+          {
+            label: "Bag",
+            name: "bag",
+            type: "select",
+            options: ["Yes", "No"],
+          },
+          { label: "Model Number", name: "modelNumber" },
+          { label: "Serial Number", name: "serialNumber" },
+          { label: "Issued IT Person Name", name: "issuedItPersonName" },
+          { label: "Approved By", name: "approvedBy" },
+          { label: "Location", name: "location" },
+          { label: "Mobile Number", name: "mobileNumber" },
         ].map(({ label, name, type = "text" }) => (
           <div className="relative" key={name}>
             <label htmlFor={name} className="text-sm text-gray-600">
@@ -136,7 +148,7 @@ const EditCandidate = () => {
             <div className="flex items-center justify-center gap-2">
               <FaCircleCheck className="text-lg text-green-500" />
               <span>
-                Edited candidate successfully! Redirecting to Table page...
+                Edited Asset successfully! Redirecting to Table page...
               </span>
             </div>
           </div>

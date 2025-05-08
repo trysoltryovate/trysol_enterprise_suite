@@ -7,18 +7,19 @@ export const appsList = [
     path: "/",
     description: "This is a brief description for IRR",
     buttonText: "Go to PIP Page",
-    page:"/candidates"
+    page: "/candidates",
   },
   {
     id: 1,
-    appName: "PIP",
+    appName: "Asset tracking",
     image:
-      "https://ecareupskill.com/wp-content/uploads/2023/12/Your-Ultimate-Guide-to-Summer-Internship-Opportunities-in-2024-in-Vadodara.webp",
+      "https://www.camcode.com/wp-content/uploads/2015/12/shutterstock_2277934347.webp",
     path: "/",
-    description: "This is a brief description for PIP",
-    buttonText: "Go to PIP Page",
-
+    description: "This is a brief description Asset tracking",
+    buttonText: " Go to Asset tracking",
+    page: "/assets-dashboard",
   },
+
   {
     id: 2,
     appName: "ATS",
@@ -83,13 +84,14 @@ export const appsList = [
   },
   {
     id: 9,
-    appName: "Asset tracking",
+    appName: "PIP",
     image:
-      "https://www.camcode.com/wp-content/uploads/2015/12/shutterstock_2277934347.webp",
+      "https://ecareupskill.com/wp-content/uploads/2023/12/Your-Ultimate-Guide-to-Summer-Internship-Opportunities-in-2024-in-Vadodara.webp",
     path: "/",
-    description: "This is a brief description Asset tracking",
-    buttonText: " Go to Asset tracking",
+    description: "This is a brief description for PIP",
+    buttonText: "Go to PIP Page",
   },
+
   {
     id: 10,
     appName: "Reporting",

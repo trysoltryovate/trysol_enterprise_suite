@@ -87,7 +87,7 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.225:8082/login",
+        "http://192.168.0.224:8082/login",
         data,
         {
           headers: { "Content-Type": "application/json" },
@@ -242,7 +242,6 @@ export default function LoginForm({ ToggleForm, handleisForgot }) {
               >
                 Forgot Password?
               </button>
-
             </div>
 
             {!isLoginFailed && (

@@ -7,9 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import HomeNav from "./HomeNav";
 
-const API_BASE_URL = "http://192.168.0.224:8082";
+const API_BASE_URL = "http://192.168.0.224:8082/asset/getAll";
 
-const CandidateTable = () => {
+const AssetscandidateTable = () => {
   const [candidates, setCandidates] = useState([]);
   const [loadingDeleteId, setLoadingDeleteId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,7 +21,7 @@ const CandidateTable = () => {
 
   const fetchCandidates = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/getAll`);
+      const response = await axios.get(API_BASE_URL);
       setCandidates(response.data);
     } catch (error) {
       console.error("Error fetching candidates:", error);
@@ -41,21 +41,19 @@ const CandidateTable = () => {
     const id = candidateToDelete;
     setLoadingDeleteId(id);
     try {
-      await axios.delete(`${API_BASE_URL}/delete/${id}`);
-      setCandidates((prev) => prev.filter((c) => c.id !== id));
-      fetchCandidates();
-
-      // Show success modal
+      await axios.delete(`http://192.168.0.224:8082/asset/delete/${id}`);
+      setCandidates((prev) =>
+        prev.filter((candidate) => candidate.employeeId !== id),
+      );
       setShowSuccessModal(true);
-      setTimeout(() => {
-        setShowSuccessModal(false);
-      }, 2000);
+      setTimeout(() => setShowSuccessModal(false), 2000);
     } catch (error) {
       console.error("Error deleting candidate:", error);
+    } finally {
+      setLoadingDeleteId(null);
+      setShowConfirmModal(false);
+      setCandidateToDelete(null);
     }
-    setLoadingDeleteId(null);
-    setShowConfirmModal(false);
-    setCandidateToDelete(null);
   };
 
   const handleCancelDelete = () => {
@@ -70,7 +68,7 @@ const CandidateTable = () => {
   };
 
   const handleEditClick = (candidate) => {
-    navigate(`/candidates/edit/${candidate.sNo}`);
+    navigate(`/assetscandidate/edit/${candidate.employeeId}`);
   };
 
   const exportToExcel = () => {
@@ -81,7 +79,6 @@ const CandidateTable = () => {
       alert("Please select at least one row to export.");
       return;
     }
-
     const worksheet = XLSX.utils.json_to_sheet(selectedRows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "SelectedCandidates");
@@ -95,7 +92,6 @@ const CandidateTable = () => {
     return Object.entries(candidate).some(([key, value]) => {
       if (!value) return false;
       const stringValue = String(value).toLowerCase();
-
       if (key === "dateOfNDA") {
         const [year, month, day] = stringValue.split("-");
         const dateWithoutDashes = stringValue.replace(/-/g, "");
@@ -107,7 +103,6 @@ const CandidateTable = () => {
           day?.includes(term)
         );
       }
-
       return stringValue.includes(term);
     });
   });
@@ -115,18 +110,16 @@ const CandidateTable = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
       <HomeNav />
-
       <div className="rounded-lg bg-white p-4 shadow-md sm:p-6">
         <p className="mb-4 flex items-center rounded-md bg-blue-100 p-3 text-sm text-gray-600 sm:text-base">
           <FiInfo className="mr-2" />
-          The candidates directory lists all candidates in the organization.
+          The Assets directory lists all Assets in the organization.
         </p>
 
-        {/* Search & Actions */}
         <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
             <h2 className="text-xl font-semibold text-gray-800 sm:text-2xl">
-              Candidates List
+              Assets List
             </h2>
             <div className="relative w-full md:w-80">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
@@ -145,7 +138,7 @@ const CandidateTable = () => {
           <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
             <Link
               className="flex items-center rounded-md bg-green-500 px-2 py-2 text-white"
-              to="/candidates/add"
+              to="/assetscandidate/add"
             >
               <button className="group mr-2 cursor-pointer">
                 <svg
@@ -163,7 +156,7 @@ const CandidateTable = () => {
                   <path strokeWidth="1.5" d="M12 16V8" />
                 </svg>
               </button>
-              Add Candidate
+              Add new Asset
             </Link>
 
             <button
@@ -182,7 +175,6 @@ const CandidateTable = () => {
           </div>
         </div>
 
-        {/* Table */}
         <div className="w-full overflow-x-auto">
           <table className="w-full min-w-[1000px] rounded-lg border border-gray-300 bg-white text-sm shadow-md">
             <thead className="bg-blue-400">
@@ -210,23 +202,24 @@ const CandidateTable = () => {
                   />
                 </th>
                 {[
-                  "S.No",
-                  "Mode",
-                  "Name",
-                  "Skill",
-                  "Projects/Shadow",
-                  "Experience",
-                  "NDA",
-                  "CV Ready",
-                  "LinkedIn",
-                  "Date Of NDA",
-                  "Notary",
-                  "Affidavit",
-                  "Salary On Deployed",
-                  "Salary On Bench",
-                  "Ready To Travel",
-                  "Email",
-                  "Mobile Num",
+                  "Employee ID",
+                  "Employee Name",
+                  "Department",
+                  "Assigned Date",
+                  "Asset Type",
+                  "Make",
+                  "Processor",
+                  "RAM",
+                  "Hard Disk",
+                  "Charger",
+                  "Charger Watt",
+                  "Bag",
+                  "Model Number",
+                  "Serial Number",
+                  "Issued IT Person Name",
+                  "Approved By",
+                  "Location",
+                  "Mobile Number",
                   "Edit",
                   "Delete",
                 ].map((heading, index) => (
@@ -238,7 +231,10 @@ const CandidateTable = () => {
             </thead>
             <tbody>
               {filteredCandidates.map((candidate, i) => (
-                <tr key={candidate.id} className="border hover:bg-blue-100">
+                <tr
+                  key={candidate.employeeId}
+                  className="border hover:bg-blue-100"
+                >
                   <td className="px-4 py-2">
                     <input
                       type="checkbox"
@@ -246,23 +242,26 @@ const CandidateTable = () => {
                       onChange={() => handleRowSelect(candidate.sNo)}
                     />
                   </td>
-                  <td className="px-4 py-2">{i + 1}</td>
-                  <td className="px-4 py-2">{candidate.mode}</td>
-                  <td className="px-4 py-2">{candidate.name}</td>
-                  <td className="px-4 py-2">{candidate.skill}</td>
-                  <td className="px-4 py-2">{candidate.projectsShadow}</td>
-                  <td className="px-4 py-2">{candidate.experience}</td>
-                  <td className="px-4 py-2">{candidate.nda}</td>
-                  <td className="px-4 py-2">{candidate.cvReady}</td>
-                  <td className="px-4 py-2">{candidate.linkedin}</td>
-                  <td className="px-4 py-2">{candidate.dateOfNDA}</td>
-                  <td className="px-4 py-2">{candidate.notary}</td>
-                  <td className="px-4 py-2">{candidate.affidavit}</td>
-                  <td className="px-4 py-2">{candidate.salaryOnDeployed}</td>
-                  <td className="px-4 py-2">{candidate.salaryOnBench}</td>
-                  <td className="px-4 py-2">{candidate.readyToTravel}</td>
-                  <td className="px-4 py-2">{candidate.email}</td>
-                  <td className="px-4 py-2">{candidate.mobileNum}</td>
+
+                  <td className="px-4 py-2">{candidate.employeeId}</td>
+                  <td className="px-4 py-2">{candidate.employeeName}</td>
+                  <td className="px-4 py-2">{candidate.department}</td>
+                  <td className="px-4 py-2">{candidate.assignedDate}</td>
+                  <td className="px-4 py-2">{candidate.assetType}</td>
+                  <td className="px-4 py-2">{candidate.make}</td>
+                  <td className="px-4 py-2">{candidate.processor}</td>
+                  <td className="px-4 py-2">{candidate.ram}</td>
+                  <td className="px-4 py-2">{candidate.hardDisk}</td>
+                  <td className="px-4 py-2">{candidate.charger}</td>
+                  <td className="px-4 py-2">{candidate.chargerWatt}</td>
+                  <td className="px-4 py-2">{candidate.bag}</td>
+                  <td className="px-4 py-2">{candidate.modelNumber}</td>
+                  <td className="px-4 py-2">{candidate.serialNumber}</td>
+                  <td className="px-4 py-2">{candidate.issuedItPersonName}</td>
+                  <td className="px-4 py-2">{candidate.approvedBy}</td>
+                  <td className="px-4 py-2">{candidate.location}</td>
+                  <td className="px-4 py-2">{candidate.mobileNumber}</td>
+
                   <td className="px-4 py-2">
                     <button
                       className="text-yellow-500 hover:text-yellow-700"
@@ -274,10 +273,10 @@ const CandidateTable = () => {
                   <td className="px-4 py-2">
                     <button
                       className="text-red-500 hover:text-red-700 disabled:opacity-50"
-                      onClick={() => confirmDelete(candidate.sNo)}
-                      disabled={loadingDeleteId === candidate.sNo}
+                      onClick={() => confirmDelete(candidate.employeeId)}
+                      disabled={loadingDeleteId === candidate.employeeId}
                     >
-                      {loadingDeleteId === candidate.sNo ? (
+                      {loadingDeleteId === candidate.employeeId ? (
                         <ImSpinner2 className="h-5 w-5 animate-spin" />
                       ) : (
                         <FiTrash className="h-5 w-5" />
@@ -301,36 +300,35 @@ const CandidateTable = () => {
       {/* Confirm Delete Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-40 pt-10">
-          <div className="w-[90%] max-w-md rounded-2xl border border-green-400 bg-green-100 px-6 py-6 text-center text-sm font-medium text-green-700 shadow-lg">
-            <p className="mb-6 text-base text-gray-800">
-              Are you sure you want to delete this candidate?
-            </p>
-            <div className="flex justify-center gap-4">
+          <div className="relative w-1/3 rounded-md bg-white p-6">
+            <h3 className="text-lg font-semibold text-gray-800">
+              Are you sure you want to delete this asset?
+            </h3>
+            <div className="mt-4 flex gap-4">
               <button
-                className="rounded bg-gray-300 px-4 py-2 text-sm text-gray-800 hover:bg-gray-400"
-                onClick={handleCancelDelete}
-              >
-                Cancel
-              </button>
-              <button
-                className="rounded bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600"
+                className="w-full rounded-md bg-red-500 py-2 text-white"
                 onClick={handleConfirmDelete}
               >
                 Confirm
+              </button>
+              <button
+                className="w-full rounded-md border py-2 text-gray-800"
+                onClick={handleCancelDelete}
+              >
+                Cancel
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Success Alert Modal */}
-
+      {/* Success Modal */}
       {showSuccessModal && (
         <div className="insert-0 fixed left-1/3 top-0 z-50 mt-4 items-center justify-center bg-opacity-50">
           <div className="flex w-[500px] justify-center rounded-2xl border border-green-400 bg-green-100 py-6 text-center text-sm font-medium text-green-700">
             <div className="flex items-center justify-center gap-2">
               <FaCircleCheck className="text-lg text-green-500" />
-              <span>Condidate deleted Successful!</span>
+              <span>Asset deleted successfully....</span>
             </div>
           </div>
         </div>
@@ -339,4 +337,4 @@ const CandidateTable = () => {
   );
 };
 
-export default CandidateTable;
+export default AssetscandidateTable;
