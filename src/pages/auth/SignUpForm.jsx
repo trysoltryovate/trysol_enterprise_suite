@@ -132,7 +132,7 @@ export default function SignUpForm() {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.225:8082/save",
+        "http://192.168.0.224:8082/signup",
         formData,
       );
 
@@ -317,10 +317,17 @@ export default function SignUpForm() {
         >
           Sign Up
         </button>
+
         <p className="opacity-120 mt-1 text-[15px] font-semibold">
           Already have an account?
           <span className="text-[#004B91]">
-            <button className="ml-1 font-bold underline">Login</button>
+            <button
+              type="button"
+              onClick={() => setShowLogin(true)}
+              className="ml-1 font-bold underline"
+            >
+              Login
+            </button>
           </span>
         </p>
       </form>
@@ -338,6 +345,3 @@ export default function SignUpForm() {
     </>
   );
 }
-
-
-

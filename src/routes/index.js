@@ -10,6 +10,18 @@ const CandidateTable = lazy(() => import("../components/Table"));
 const AddCandidate = lazy(() => import("../components/AddCandidate"));
 const EditCandidate = lazy(() => import("../components/EditCandidate"));
 const SignUpForm = lazy(() => import("../pages/auth/SignUpForm"));
+const AssetsTable = lazy(() => import("../components/AssetsTable"));
+const AssetsAddCandidate = lazy(
+  () => import("../components/AssetsAddCandidate"),
+);
+const AssetsEditCandidate = lazy(
+  () => import("../components/AssetsEditCandidate"),
+);
+const AssetsDashboard = lazy(() => import("../components/AssetsDashboard"));
+const AssetsStore = lazy(() => import("../components/AssetsStore"));
+const AssetsDeleteddataTable = lazy(
+  () => import("../components/AssetsDeleteddata"),
+);
 
 export const routes = createBrowserRouter([
   {
@@ -17,7 +29,7 @@ export const routes = createBrowserRouter([
     element: LazyLoad(LoginPage),
   },
   {
-    path: "/signup", 
+    path: "/signup",
     element: LazyLoad(SignUpForm),
   },
 
@@ -40,5 +52,29 @@ export const routes = createBrowserRouter([
   {
     path: "/candidates/edit/:id",
     element: LazyLoad(EditCandidate),
+  },
+  {
+    path: "/assets-table",
+    element: LazyLoad(AssetsTable),
+  },
+  {
+    path: "/assetscandidate/add",
+    element: LazyLoad(AssetsAddCandidate),
+  },
+  {
+    path: "/assetscandidate/edit/:id",
+    element: LazyLoad(AssetsEditCandidate),
+  },
+  {
+    path: "/assets-dashboard",
+    element: LazyLoad(AssetsDashboard),
+  },
+  {
+    path: "/dashboard/AssetsStore",
+    element: LazyLoad(AssetsStore),
+  },
+  {
+    path: "/assetscandidate/deleted",
+    element: LazyLoad(AssetsDeleteddataTable),
   },
 ]);
