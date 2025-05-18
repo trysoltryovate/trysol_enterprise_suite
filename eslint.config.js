@@ -20,7 +20,7 @@ export default [
     plugins: {
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      "simple-import-sort": eslintPluginSimpleImportSort,
+      "simple-import-sort": ['simple-import-sort'],
     },
     rules: {
       ...js.configs.recommended.rules,
