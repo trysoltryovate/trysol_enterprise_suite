@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import trysolicon from '../assets/logo.png'
 import Err404 from '../assets/404-error.png'
 import { useNavigate } from 'react-router-dom'
+import HomeNav from './HomeNav'
 
 
 function Error404page() {
@@ -21,11 +22,12 @@ function Error404page() {
     <div>
         <div className="error-main-container m-5">
             {/* image - Trysol_icon */}
-            <div className="image-container w-[150px] h-[100px] flex items-center justify-center">
+            <HomeNav/>
+            {/* <div className="image-container w-[150px] h-[100px] flex items-center justify-center">
                 <div className="imagelogo w-25 h-[65px]">
                     <img src={trysolicon} alt="Trysol_logo" className='w-full h-full object-contain'/>
                 </div>
-            </div>
+            </div> */}
 
             {/* Image 404 */}
 
